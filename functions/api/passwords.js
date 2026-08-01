@@ -27,13 +27,16 @@ export async function onRequestPost({ request, env }) {
 
   const kv = env.PASSWORD_EGG_KV;
   if (!kv) {
-    console.error("PASSWORD_EGG_KV binding missing");
     return jsonResponse({ ok: true, count: null }, 200);
   }
 
-  const raw = await kv.get("visits");
-  const count = (parseInt(raw || "0", 10) || 0) + 1;
-  await kv.put("visits", String(count));
-
-  return jsonResponse({ ok: true, count }, 200);
+  try {
+    const raw = await kv.get("visits");
+    const count = (parseInt(raw || "0", 10) || 0) + 1;
+    await kv.put("visits", String(count));
+    return jsonResponse({ ok: true, count }, 200);
+  } catch (err) {
+    console.error("KV error", err);
+    return jsonResponse({ ok: true, count: null }, 200);
+  }
 }

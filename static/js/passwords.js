@@ -2,6 +2,11 @@
   var promptOverlay, rewardOverlay, nedryOverlay, form, input, quaidImg, countEl;
   var quaidSrc = "";
   var nedryTimer;
+  var bound = false;
+
+  function isCorrectPassword(value) {
+    return String(value || "").trim().toLowerCase() === "password";
+  }
 
   function init() {
     promptOverlay = document.getElementById("passwords-overlay");
@@ -16,35 +21,38 @@
 
     quaidSrc = quaidImg ? quaidImg.getAttribute("data-src") || "" : "";
 
-    form.addEventListener("submit", onSubmit);
-    promptOverlay.querySelector(".passwords-close").addEventListener("click", closePrompt);
-    promptOverlay.querySelector(".passwords-cancel").addEventListener("click", closePrompt);
-    promptOverlay.addEventListener("click", function (e) {
-      if (e.target === promptOverlay) closePrompt();
-    });
+    if (!bound) {
+      bound = true;
+      form.addEventListener("submit", onSubmit);
+      promptOverlay.querySelector(".passwords-close").addEventListener("click", closePrompt);
+      promptOverlay.querySelector(".passwords-cancel").addEventListener("click", closePrompt);
+      promptOverlay.addEventListener("click", function (e) {
+        if (e.target === promptOverlay) closePrompt();
+      });
 
-    if (rewardOverlay) {
-      rewardOverlay.querySelector(".passwords-reward-close").addEventListener("click", closeReward);
-      rewardOverlay.addEventListener("click", function (e) {
-        if (e.target === rewardOverlay) closeReward();
+      if (rewardOverlay) {
+        rewardOverlay.querySelector(".passwords-reward-close").addEventListener("click", closeReward);
+        rewardOverlay.addEventListener("click", function (e) {
+          if (e.target === rewardOverlay) closeReward();
+        });
+      }
+
+      if (nedryOverlay) {
+        nedryOverlay.querySelector(".nedry-dismiss").addEventListener("click", closeNedry);
+      }
+
+      document.addEventListener("keydown", function (e) {
+        if (e.key === "Escape") {
+          if (nedryOverlay && !nedryOverlay.classList.contains("is-hidden")) closeNedry();
+          else if (rewardOverlay && !rewardOverlay.classList.contains("is-hidden")) closeReward();
+          else if (promptOverlay && !promptOverlay.classList.contains("is-hidden")) closePrompt();
+        }
       });
     }
-
-    if (nedryOverlay) {
-      nedryOverlay.querySelector(".nedry-dismiss").addEventListener("click", closeNedry);
-    }
-
-    document.addEventListener("keydown", function (e) {
-      if (e.key === "Escape") {
-        if (nedryOverlay && !nedryOverlay.classList.contains("is-hidden")) closeNedry();
-        else if (rewardOverlay && !rewardOverlay.classList.contains("is-hidden")) closeReward();
-        else if (promptOverlay && !promptOverlay.classList.contains("is-hidden")) closePrompt();
-      }
-    });
   }
 
   function open() {
-    if (!promptOverlay) init();
+    init();
     if (!promptOverlay) return;
 
     closeReward();
@@ -94,6 +102,7 @@
 
   function showReward(count) {
     closePrompt();
+    closeNedry();
     if (!rewardOverlay) return;
 
     if (quaidImg && quaidSrc) {
@@ -106,18 +115,37 @@
     rewardOverlay.setAttribute("aria-hidden", "false");
   }
 
+  function parseJsonResponse(res) {
+    return res.text().then(function (text) {
+      if (!text) return {};
+      try {
+        return JSON.parse(text);
+      } catch {
+        return {};
+      }
+    });
+  }
+
   function onSubmit(e) {
     e.preventDefault();
+    init();
+
     var password = input ? input.value : "";
+
+    if (!isCorrectPassword(password)) {
+      closePrompt();
+      showNedry();
+      return;
+    }
 
     fetch("/api/passwords", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ password: password }),
+      body: JSON.stringify({ password: password.trim() }),
     })
       .then(function (res) {
-        return res.json().then(function (data) {
-          return { ok: res.ok, status: res.status, data: data };
+        return parseJsonResponse(res).then(function (data) {
+          return { ok: res.ok, data: data };
         });
       })
       .then(function (result) {
@@ -125,17 +153,10 @@
           showReward(result.data.count);
           return;
         }
-        if (result.status === 403 && result.data.error === "magic_word") {
-          closePrompt();
-          showNedry();
-          return;
-        }
-        closePrompt();
-        showNedry();
+        showReward(null);
       })
       .catch(function () {
-        closePrompt();
-        showNedry();
+        showReward(null);
       });
   }
 
