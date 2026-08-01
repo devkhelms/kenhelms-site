@@ -12,6 +12,36 @@ function validEmail(value) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
 }
 
+async function resendFailureMessage(response) {
+  const raw = await response.text();
+  console.error("Resend error", response.status, raw);
+
+  try {
+    const data = JSON.parse(raw);
+    const msg = String(data.message || data.error || "");
+
+    if (msg.includes("only send testing emails")) {
+      return "Sandbox mode: set CONTACT_TO to your Proton address, or verify kenhelms.dev in Resend.";
+    }
+
+    if (msg.includes("verify a domain") || msg.includes("not verified")) {
+      return "Verify kenhelms.dev in Resend before using forms@kenhelms.dev.";
+    }
+
+    if (response.status === 401 || msg.toLowerCase().includes("api key")) {
+      return "Invalid Resend API key. Update RESEND_API_KEY in Cloudflare.";
+    }
+
+    if (msg.includes("Invalid `from`")) {
+      return "Invalid sender address. Check CONTACT_FROM in Cloudflare.";
+    }
+  } catch {
+    /* ignore parse errors */
+  }
+
+  return "Could not send message.";
+}
+
 export async function onRequestPost({ request, env }) {
   let body;
   try {
@@ -72,6 +102,8 @@ export async function onRequestPost({ request, env }) {
   const from = env.CONTACT_FROM || "forms@kenhelms.dev";
   const text = ["Name: " + name, "Email: " + email, "", message].join("\n");
 
+  const fromHeader = from.endsWith("@kenhelms.dev") ? "kenhelms.dev <" + from + ">" : from;
+
   const mailRes = await fetch("https://api.resend.com/emails", {
     method: "POST",
     headers: {
@@ -79,7 +111,7 @@ export async function onRequestPost({ request, env }) {
       Authorization: "Bearer " + apiKey,
     },
     body: JSON.stringify({
-      from: from,
+      from: fromHeader,
       to: [to],
       reply_to: email,
       subject: "ping from " + name,
@@ -88,8 +120,7 @@ export async function onRequestPost({ request, env }) {
   });
 
   if (!mailRes.ok) {
-    console.error("Resend error", mailRes.status, await mailRes.text());
-    return jsonResponse({ error: "Could not send message" }, 502);
+    return jsonResponse({ error: await resendFailureMessage(mailRes) }, 502);
   }
 
   return jsonResponse({ ok: true });
