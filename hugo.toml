@@ -1,0 +1,9 @@
+baseURL = 'https://kenhelms.dev/'
+title = 'Ken Helms'
+defaultContentLanguage = 'en'
+
+[languages.en]
+  locale = 'en-us'
+  label = 'English'
+
+disableKinds = ['taxonomy', 'term']
