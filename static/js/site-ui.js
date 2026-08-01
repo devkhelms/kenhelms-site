@@ -2,6 +2,8 @@
   function setStatus(text) {
     var el = document.getElementById("status-message");
     if (el) el.textContent = text;
+    var taskbarStatus = document.getElementById("taskbar-status");
+    if (taskbarStatus) taskbarStatus.textContent = text;
   }
 
   function closeStartMenu() {

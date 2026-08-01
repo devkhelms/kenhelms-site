@@ -1,0 +1,5 @@
+{{- $v := getenv "CF_PAGES_COMMIT_SHA" -}}
+{{- if not $v -}}
+  {{- $v = site.Params.assetVersion | default "1" -}}
+{{- end -}}
+{{- $v | truncate 12 "" | strings.TrimSpace -}}

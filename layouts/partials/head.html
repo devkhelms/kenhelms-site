@@ -14,4 +14,4 @@
 <meta name="twitter:description" content="{{ .Site.Params.tagline }}">
 <script>try{if(sessionStorage.getItem("kenhelms-boot-seen"))document.documentElement.classList.add("boot-skip")}catch(e){}</script>
 <style>html.boot-active{overflow:hidden}</style>
-<link rel="stylesheet" href="{{ "css/site.css" | relURL }}">
+<link rel="stylesheet" href="{{ printf "%s?v=%s" ("css/site.css" | relURL) (partial "asset-version.html" .) }}">

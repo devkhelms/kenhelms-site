@@ -113,11 +113,26 @@ body::before {
   border: 1px dotted transparent;
 }
 
-.desktop-icon-btn:hover,
-.desktop-icon-btn:focus-visible {
+.desktop-icon-btn:active,
+.desktop-file:active {
   background: rgba(0, 0, 128, 0.45);
   border-color: rgba(255, 255, 255, 0.35);
-  outline: none;
+}
+
+@media (hover: hover) {
+  .desktop-icon-btn:hover,
+  .desktop-icon-btn:focus-visible {
+    background: rgba(0, 0, 128, 0.45);
+    border-color: rgba(255, 255, 255, 0.35);
+    outline: none;
+  }
+
+  .desktop-file:hover,
+  .desktop-file:focus-visible {
+    background: rgba(0, 0, 128, 0.45);
+    border-color: rgba(255, 255, 255, 0.35);
+    outline: none;
+  }
 }
 
 .icon-folder,
@@ -184,13 +199,6 @@ body::before {
   cursor: pointer;
   background: transparent;
   border: 1px dotted transparent;
-}
-
-.desktop-file:hover,
-.desktop-file:focus-visible {
-  background: rgba(0, 0, 128, 0.45);
-  border-color: rgba(255, 255, 255, 0.35);
-  outline: none;
 }
 
 .icon-file-csv {
@@ -561,13 +569,16 @@ html.boot-active {
   border-color: var(--win-light) var(--win-black) var(--win-black) var(--win-light);
 }
 
-.win95-link-btn:hover {
-  color: var(--win-black) !important;
+.win95-link-btn:active {
+  border-color: var(--win-black) var(--win-light) var(--win-light) var(--win-black);
   background: #d4d4d4;
 }
 
-.win95-link-btn:active {
-  border-color: var(--win-black) var(--win-light) var(--win-light) var(--win-black);
+@media (hover: hover) {
+  .win95-link-btn:hover {
+    color: var(--win-black) !important;
+    background: #d4d4d4;
+  }
 }
 
 .link-list a {
@@ -728,9 +739,16 @@ html.overlay-open {
   touch-action: manipulation;
 }
 
-.start-menu-item:hover {
+.start-menu-item:active {
   background: var(--title-blue);
   color: var(--win-light);
+}
+
+@media (hover: hover) {
+  .start-menu-item:hover {
+    background: var(--title-blue);
+    color: var(--win-light);
+  }
 }
 
 .start-menu-divider {
@@ -968,6 +986,10 @@ button.win95-btn {
   border: 1px inset var(--win-dark);
 }
 
+.taskbar-status {
+  display: none;
+}
+
 .taskbar-clock {
   flex-shrink: 0;
   min-width: 4.75rem;
@@ -1115,11 +1137,18 @@ button.win95-btn {
   border: 1px dotted transparent;
 }
 
-.drive-folder-btn:hover,
-.drive-folder-btn:focus-visible {
+.drive-folder-btn:active {
   background: rgba(0, 0, 128, 0.18);
   border-color: rgba(0, 0, 128, 0.45);
-  outline: none;
+}
+
+@media (hover: hover) {
+  .drive-folder-btn:hover,
+  .drive-folder-btn:focus-visible {
+    background: rgba(0, 0, 128, 0.18);
+    border-color: rgba(0, 0, 128, 0.45);
+    outline: none;
+  }
 }
 
 .drive-folder-icon {
@@ -1468,11 +1497,22 @@ button.win95-btn {
   }
 
   .taskbar-window {
+    display: none;
+  }
+
+  .taskbar-status {
+    display: block;
+    flex: 1;
     min-width: 0;
+    padding: 0.15rem 0.45rem;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
     font-size: 0.68rem;
+    font-weight: 700;
+    background: var(--title-blue);
+    color: var(--win-light);
+    border: 1px inset var(--win-dark);
   }
 
   .taskbar-clock {
