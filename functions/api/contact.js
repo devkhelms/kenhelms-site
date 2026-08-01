@@ -12,6 +12,14 @@ function validEmail(value) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
 }
 
+function escapeHtml(value) {
+  return String(value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
 async function resendFailureMessage(response) {
   const raw = await response.text();
   console.error("Resend error", response.status, raw);
@@ -101,6 +109,11 @@ export async function onRequestPost({ request, env }) {
   const to = env.CONTACT_TO || "ping@kenhelms.dev";
   const from = env.CONTACT_FROM || "forms@kenhelms.dev";
   const text = ["Name: " + name, "Email: " + email, "", message].join("\n");
+  const html = [
+    "<p><strong>Name:</strong> " + escapeHtml(name) + "</p>",
+    "<p><strong>Email:</strong> " + escapeHtml(email) + "</p>",
+    "<p>" + escapeHtml(message).replace(/\n/g, "<br>") + "</p>",
+  ].join("\n");
 
   const fromHeader = from.endsWith("@kenhelms.dev") ? "kenhelms.dev <" + from + ">" : from;
 
@@ -116,6 +129,7 @@ export async function onRequestPost({ request, env }) {
       reply_to: email,
       subject: "ping from " + name,
       text: text,
+      html: html,
     }),
   });
 
