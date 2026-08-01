@@ -764,6 +764,10 @@ button.win95-btn {
   overflow: hidden;
 }
 
+.app-overlays[aria-hidden="true"] {
+  z-index: 9000;
+}
+
 .app-overlays .game-overlay:not(.is-hidden),
 .app-overlays .nedry-overlay:not(.is-hidden) {
   pointer-events: auto;
@@ -1312,6 +1316,23 @@ button.win95-btn {
     margin: 0;
     padding: 0.5rem max(0.65rem, env(safe-area-inset-right)) max(0.5rem, env(safe-area-inset-bottom)) max(0.65rem, env(safe-area-inset-left));
     z-index: 10010;
+  }
+
+  html.start-menu-open .site-footer {
+    z-index: 10055;
+  }
+
+  html.start-menu-open .app-overlays[aria-hidden="true"] {
+    z-index: 9000;
+  }
+
+  .start-menu.is-open {
+    position: fixed;
+    left: max(0.65rem, env(safe-area-inset-left));
+    right: auto;
+    bottom: calc(3.35rem + env(safe-area-inset-bottom));
+    z-index: 10056;
+    min-width: 11rem;
   }
 
   .site-footer .taskbar {

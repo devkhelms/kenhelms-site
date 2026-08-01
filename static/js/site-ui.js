@@ -7,6 +7,21 @@
   function closeStartMenu() {
     var startMenu = document.getElementById("start-menu");
     if (startMenu) startMenu.classList.remove("is-open");
+    document.documentElement.classList.remove("start-menu-open");
+  }
+
+  function openStartMenu() {
+    var startMenu = document.getElementById("start-menu");
+    if (!startMenu) return;
+    startMenu.classList.add("is-open");
+    document.documentElement.classList.add("start-menu-open");
+  }
+
+  function toggleStartMenu() {
+    var startMenu = document.getElementById("start-menu");
+    if (!startMenu) return;
+    if (startMenu.classList.contains("is-open")) closeStartMenu();
+    else openStartMenu();
   }
 
   function focusPortfolio() {
@@ -15,9 +30,13 @@
     window.scrollTo(0, 0);
     if (win.scrollIntoView) {
       try {
-        win.scrollIntoView({ block: "start", behavior: "instant" });
+        win.scrollIntoView({ block: "center", behavior: "smooth" });
       } catch (e) {
-        win.scrollIntoView(true);
+        try {
+          win.scrollIntoView({ block: "center" });
+        } catch (e2) {
+          win.scrollIntoView(true);
+        }
       }
     }
     win.classList.remove("is-highlight");
@@ -64,9 +83,19 @@
 
   function bindActivate(el, action) {
     if (!el) return;
-    el.addEventListener("click", function (e) {
+    var lastRun = 0;
+    function run(e) {
+      e.preventDefault();
       e.stopPropagation();
+      var now = Date.now();
+      if (now - lastRun < 450) return;
+      lastRun = now;
       action();
+    }
+    el.addEventListener("click", run);
+    el.addEventListener("pointerup", function (e) {
+      if (e.pointerType === "mouse" && e.button !== 0) return;
+      run(e);
     });
   }
 
@@ -103,27 +132,34 @@
     });
   }
 
+  function bindMenuItem(id) {
+    var item = document.getElementById(id);
+    if (!item) return;
+    bindActivate(item, function () {
+      handleMenuAction(id);
+    });
+  }
+
   function initStartMenu() {
     var startBtn = document.getElementById("start-btn");
     var startMenu = document.getElementById("start-menu");
     var startWrap = startBtn ? startBtn.closest(".start-wrap") : null;
     if (!startBtn || !startMenu) return;
 
-    startBtn.addEventListener("click", function (e) {
-      e.stopPropagation();
-      startMenu.classList.toggle("is-open");
-    });
+    bindActivate(startBtn, toggleStartMenu);
 
-    startMenu.addEventListener("click", function (e) {
-      var item = e.target.closest(".start-menu-item");
-      if (!item || !item.id) return;
-      e.preventDefault();
-      e.stopPropagation();
-      handleMenuAction(item.id);
-    });
+    [
+      "launch-portfolio",
+      "launch-files",
+      "launch-snake",
+      "launch-contact",
+      "launch-passwords",
+      "launch-reboot",
+    ].forEach(bindMenuItem);
 
-    document.addEventListener("click", function (e) {
+    document.addEventListener("pointerdown", function (e) {
       if (!startMenu.classList.contains("is-open")) return;
+      if (startMenu.contains(e.target)) return;
       if (startWrap && startWrap.contains(e.target)) return;
       closeStartMenu();
     });
