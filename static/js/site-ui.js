@@ -1,6 +1,4 @@
 (function () {
-  var lastMenuAction = { id: "", at: 0 };
-
   function setStatus(text) {
     var el = document.getElementById("status-message");
     if (el) el.textContent = text;
@@ -9,14 +7,12 @@
   function closeStartMenu() {
     var startMenu = document.getElementById("start-menu");
     if (startMenu) startMenu.classList.remove("is-open");
-    document.documentElement.classList.remove("start-menu-open");
   }
 
   function openStartMenu() {
     var startMenu = document.getElementById("start-menu");
     if (!startMenu) return;
     startMenu.classList.add("is-open");
-    document.documentElement.classList.add("start-menu-open");
   }
 
   function toggleStartMenu() {
@@ -56,10 +52,6 @@
   }
 
   function handleMenuAction(id) {
-    var now = Date.now();
-    if (lastMenuAction.id === id && now - lastMenuAction.at < 400) return;
-    lastMenuAction = { id: id, at: now };
-
     closeStartMenu();
 
     switch (id) {
@@ -122,25 +114,24 @@
   }
 
   function initStartMenu() {
+    var startBtn = document.getElementById("start-btn");
     var startMenu = document.getElementById("start-menu");
     var startWrap = document.querySelector(".start-wrap");
-    if (!startMenu) return;
+    if (!startBtn || !startMenu) return;
 
-    startMenu.addEventListener(
-      "click",
-      function (e) {
-        var item = e.target.closest(".start-menu-item");
-        if (!item || !item.id) return;
-        e.preventDefault();
-        e.stopPropagation();
-        handleMenuAction(item.id);
-      },
-      true
-    );
+    startBtn.addEventListener("click", function (e) {
+      e.stopPropagation();
+      toggleStartMenu();
+    });
+
+    startMenu.addEventListener("click", function (e) {
+      var item = e.target.closest(".start-menu-item");
+      if (!item || !item.id) return;
+      handleMenuAction(item.id);
+    });
 
     document.addEventListener("click", function (e) {
       if (!startMenu.classList.contains("is-open")) return;
-      if (startMenu.contains(e.target)) return;
       if (startWrap && startWrap.contains(e.target)) return;
       closeStartMenu();
     });
@@ -170,13 +161,6 @@
     if (!el) return;
     var now = new Date();
     el.textContent = now.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
-  }
-
-  window.__handleMenuAction = handleMenuAction;
-  window.__toggleStartMenu = toggleStartMenu;
-
-  if (window.SiteMenu) {
-    window.SiteMenu._ready = true;
   }
 
   document.addEventListener("DOMContentLoaded", function () {

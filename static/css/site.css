@@ -12,6 +12,13 @@
   --dos-green: #4a8a4a;
   --mono: "Courier New", Courier, "Lucida Console", monospace;
   --ui: Tahoma, "Segoe UI", Arial, sans-serif;
+  --z-scanlines: 2;
+  --z-page: 10;
+  --z-overlays-idle: 20;
+  --z-taskbar: 100;
+  --z-overlays: 200;
+  --z-boot: 300;
+  --z-skip-link: 400;
 }
 
 *,
@@ -50,7 +57,7 @@ body::before {
     rgba(0, 0, 0, 0.35) 2px,
     rgba(0, 0, 0, 0.35) 4px
   );
-  z-index: 9999;
+  z-index: var(--z-scanlines);
 }
 
 .skip-link {
@@ -61,7 +68,7 @@ body::before {
 .skip-link:focus {
   left: 1rem;
   top: 1rem;
-  z-index: 10000;
+  z-index: var(--z-skip-link);
   padding: 0.25rem 0.5rem;
   background: var(--win-gray);
   color: var(--win-black);
@@ -83,7 +90,7 @@ body::before {
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  z-index: 1;
+  z-index: var(--z-page);
 }
 
 .desktop-icon {
@@ -230,7 +237,7 @@ body::before {
 
 .win95-window {
   position: relative;
-  z-index: 1;
+  z-index: var(--z-page);
   background: var(--win-gray);
   border: 2px solid;
   border-color: var(--win-light) var(--win-black) var(--win-black) var(--win-light);
@@ -357,7 +364,7 @@ html.boot-skip .boot-overlay,
 .boot-overlay {
   position: fixed;
   inset: 0;
-  z-index: 10060;
+  z-index: var(--z-boot);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -652,7 +659,7 @@ html.overlay-open {
   max-width: 42rem;
   padding: 0.5rem 1rem 2rem;
   position: relative;
-  z-index: 10010;
+  z-index: var(--z-taskbar);
 }
 
 .taskbar {
@@ -682,7 +689,6 @@ html.overlay-open {
 
 .start-wrap {
   position: relative;
-  z-index: 10011;
 }
 
 .start-menu {
@@ -698,7 +704,6 @@ html.overlay-open {
   background: var(--win-gray);
   border: 2px solid;
   border-color: var(--win-light) var(--win-black) var(--win-black) var(--win-light);
-  z-index: 10012;
   touch-action: manipulation;
   transition: opacity 0.12s ease;
 }
@@ -744,7 +749,6 @@ button.win95-btn {
 .game-overlay {
   position: fixed;
   inset: 0;
-  z-index: 10001;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -764,13 +768,13 @@ button.win95-btn {
 .app-overlays {
   position: fixed;
   inset: 0;
-  z-index: 10050;
+  z-index: var(--z-overlays);
   pointer-events: none;
   overflow: hidden;
 }
 
 .app-overlays[aria-hidden="true"] {
-  z-index: 9000;
+  z-index: var(--z-overlays-idle);
 }
 
 .app-overlays .game-overlay:not(.is-hidden),
@@ -1134,10 +1138,6 @@ button.win95-btn {
   width: min(100%, 26rem);
 }
 
-#drive-c-image-overlay:not(.is-hidden) {
-  z-index: 10002;
-}
-
 .drive-image-body {
   text-align: center;
   background: var(--win-gray);
@@ -1157,7 +1157,6 @@ button.win95-btn {
 .nedry-overlay {
   position: fixed;
   inset: 0;
-  z-index: 10002;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1320,19 +1319,6 @@ button.win95-btn {
     max-width: none;
     margin: 0;
     padding: 0.5rem max(0.65rem, env(safe-area-inset-right)) max(0.5rem, env(safe-area-inset-bottom)) max(0.65rem, env(safe-area-inset-left));
-    z-index: 10070;
-  }
-
-  html.start-menu-open .site-footer {
-    z-index: 10070;
-  }
-
-  html.start-menu-open .app-overlays[aria-hidden="true"] {
-    z-index: 9000;
-  }
-
-  html.overlay-open .app-overlays {
-    z-index: 10080;
   }
 
   .start-menu.is-open {
@@ -1340,7 +1326,7 @@ button.win95-btn {
     left: max(0.65rem, env(safe-area-inset-left));
     right: auto;
     bottom: calc(3.35rem + env(safe-area-inset-bottom));
-    z-index: 10071;
+    z-index: calc(var(--z-taskbar) + 1);
     min-width: 11rem;
   }
 

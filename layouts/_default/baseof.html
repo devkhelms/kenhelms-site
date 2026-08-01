@@ -7,26 +7,6 @@
   <a class="skip-link" href="#main">Skip to content</a>
   {{ block "main" . }}{{ end }}
   {{ partial "overlays.html" . }}
-  <script>
-  window.SiteMenu = {
-    activate: function (id, e) {
-      if (e) {
-        e.preventDefault();
-        e.stopPropagation();
-      }
-      if (window.__handleMenuAction) window.__handleMenuAction(id);
-      return false;
-    },
-    toggleStart: function (e) {
-      if (e) {
-        e.preventDefault();
-        e.stopPropagation();
-      }
-      if (window.__toggleStartMenu) window.__toggleStartMenu();
-      return false;
-    },
-  };
-  </script>
   {{ partial "footer.html" . }}
   {{ partial "boot.html" . }}
   <script src="{{ "js/overlays.js" | relURL }}"></script>
