@@ -1,0 +1,22 @@
+<article class="project-card">
+  <header class="project-header">
+    <h3 class="project-title">{{ .title }}<span class="file-ext">.EXE</span></h3>
+    <span class="project-year">{{ .year }}</span>
+  </header>
+  <p class="project-description">{{ .description }}</p>
+  {{ with .tags }}
+  <ul class="project-tags" aria-label="Technologies">
+    {{ range . }}
+    <li>{{ . }}</li>
+    {{ end }}
+  </ul>
+  {{ end }}
+  {{ with .links }}
+  <div class="project-links">
+    {{ with .project_site }}<a class="win95-link-btn" href="{{ . }}" rel="noopener noreferrer">Project Site</a>{{ end }}
+    {{ with .repo }}<a class="win95-link-btn" href="{{ . }}" rel="noopener noreferrer">Source</a>{{ end }}
+    {{ with .demo }}<a class="win95-link-btn" href="{{ . }}" rel="noopener noreferrer">Demo</a>{{ end }}
+    {{ with .writeup }}<a class="win95-link-btn" href="{{ . }}" rel="noopener noreferrer">Write-up</a>{{ end }}
+  </div>
+  {{ end }}
+</article>

@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="{{ .Site.Language.Lang }}">
+<head>
+  {{ partial "head.html" . }}
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  {{ block "main" . }}{{ end }}
+  {{ partial "footer.html" . }}
+  {{ partial "snake.html" . }}
+  {{ partial "contact.html" . }}
+  <script src="{{ "js/site-ui.js" | relURL }}"></script>
+</body>
+</html>

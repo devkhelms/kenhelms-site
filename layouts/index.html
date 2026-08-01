@@ -1,22 +1,93 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{{ .Site.Title }}</title>
-  <style>
-    body {
-      font-family: system-ui, sans-serif;
-      max-width: 40rem;
-      margin: 4rem auto;
-      padding: 0 1rem;
-      line-height: 1.6;
-      color: #1a1a1a;
-    }
-  </style>
-</head>
-<body>
-  <h1>{{ .Title }}</h1>
-  {{ .Content }}
-</body>
-</html>
+{{ define "main" }}
+{{ $projects := where hugo.Data.projects "featured" true }}
+<main id="main" class="page">
+  <div class="desktop-icons" aria-hidden="true">
+    <div class="desktop-icon">
+      <span class="icon-folder"></span>
+      <span class="icon-label">Projects</span>
+    </div>
+    <div class="desktop-icon">
+      <span class="icon-drive"></span>
+      <span class="icon-label">Drive C:</span>
+    </div>
+  </div>
+
+  <div class="win95-window">
+    <div class="title-bar">
+      <span class="title-bar-text">C:\SITE\portfolio.exe — MS-DOS Prompt</span>
+      <div class="title-bar-controls" aria-hidden="true">
+        <span class="win95-btn">_</span>
+        <span class="win95-btn">□</span>
+        <span class="win95-btn">×</span>
+      </div>
+    </div>
+
+    <nav class="menu-bar" aria-hidden="true">
+      <span><u>F</u>ile</span>
+      <span><u>E</u>dit</span>
+      <span><u>V</u>iew</span>
+      <span><u>H</u>elp</span>
+    </nav>
+
+    <div class="toolbar" aria-hidden="true">
+      <span class="toolbar-btn">Copy</span>
+      <span class="toolbar-btn">Paste</span>
+      <span class="toolbar-divider"></span>
+      <span class="toolbar-btn">Find</span>
+      <span class="toolbar-btn">Print</span>
+    </div>
+
+    <div class="terminal-body">
+      <div class="boot-lines" aria-hidden="true">
+        <p>SITE(R) Command Shell Version 6.22</p>
+        <p>(C) 1985-{{ now.Year }}</p>
+        <p>HIMEM is testing extended memory ... done.</p>
+        <p>Loading CONFIG.SYS ... OK</p>
+        <p class="boot-spacer">C:\SITE&gt; welcome.bat</p>
+        <p>Loading portfolio module ... OK</p>
+        <p class="boot-muted">640K ought to be enough for anybody.</p>
+      </div>
+
+      <header class="site-header">
+        <h1 class="site-title">{{ .Site.Title }}</h1>
+        <p class="site-tagline">{{ .Site.Params.tagline }}</p>
+      </header>
+
+      <section id="projects" class="section">
+        <h2 class="section-heading">Projects</h2>
+        <div class="project-list">
+          {{ range $projects }}
+            {{ partial "project-card.html" . }}
+          {{ end }}
+        </div>
+        <p class="dir-summary" aria-hidden="true">{{ len $projects }} File(s)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0 bytes free</p>
+      </section>
+
+      <section id="elsewhere" class="section">
+        <p class="command-echo" aria-hidden="true"><span class="prompt-path">C:\SITE&gt;</span> type links.txt</p>
+        <h2 class="section-heading">Elsewhere</h2>
+        <ul class="link-list">
+          {{ with .Site.Params.github }}
+          <li><a href="{{ . }}" rel="noopener noreferrer">GitHub</a></li>
+          {{ end }}
+          <li><button type="button" class="link-button" id="open-contact">Contact</button></li>
+        </ul>
+      </section>
+
+      <p class="prompt-line" aria-hidden="true">
+        <span class="prompt-path">C:\SITE&gt;</span><span class="cursor">_</span>
+      </p>
+    </div>
+
+    <div class="status-bar" aria-hidden="true">
+      <span class="status-left">Ready</span>
+      <span class="status-indicators">
+        <span>Num</span>
+        <span>Caps</span>
+        <span>Scrl</span>
+      </span>
+      <span class="status-right">{{ len $projects }} object(s)&nbsp;&nbsp;F1=Help</span>
+    </div>
+  </div>
+</main>
+{{ end }}

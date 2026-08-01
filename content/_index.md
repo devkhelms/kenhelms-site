@@ -1,5 +1,3 @@
 ---
-title: Hello World
+title: Home
 ---
-
-Hello from **kenhelms.dev**. Site is live.

@@ -1,0 +1,36 @@
+<div class="game-overlay is-hidden" id="contact-overlay" aria-hidden="true">
+  <div class="win95-window game-window contact-window" role="dialog" aria-labelledby="contact-title" aria-modal="true">
+    <div class="title-bar">
+      <span class="title-bar-text" id="contact-title">C:\SITE\ping.exe</span>
+      <div class="title-bar-controls">
+        <button type="button" class="win95-btn contact-close" aria-label="Close">×</button>
+      </div>
+    </div>
+    <div class="game-body contact-body">
+      <p class="contact-intro">Send a note. No list, no pitch.</p>
+      <form id="contact-form" class="contact-form" novalidate>
+        <label class="contact-label">
+          Name
+          <input class="contact-input" type="text" name="name" id="contact-name" autocomplete="name" required maxlength="100">
+        </label>
+        <label class="contact-label">
+          Email
+          <input class="contact-input" type="email" name="email" id="contact-email" autocomplete="email" required maxlength="254">
+        </label>
+        <label class="contact-label">
+          Message
+          <textarea class="contact-input contact-textarea" name="message" id="contact-message" required maxlength="5000" rows="5"></textarea>
+        </label>
+        <label class="contact-honeypot" aria-hidden="true">
+          Website
+          <input type="text" name="website" id="contact-website" tabindex="-1" autocomplete="off">
+        </label>
+        {{ with .Site.Params.turnstileSiteKey }}
+        <div class="contact-turnstile cf-turnstile" data-sitekey="{{ . }}"></div>
+        {{ end }}
+        <p class="contact-status" id="contact-status" role="status" aria-live="polite"></p>
+        <button type="submit" class="win95-link-btn" id="contact-submit">Send</button>
+      </form>
+    </div>
+  </div>
+</div>

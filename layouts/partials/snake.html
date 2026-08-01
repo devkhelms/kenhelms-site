@@ -1,0 +1,25 @@
+<div class="game-overlay is-hidden" id="snake-overlay" aria-hidden="true">
+  <div class="win95-window game-window" role="dialog" aria-labelledby="snake-title" aria-modal="true">
+    <div class="title-bar">
+      <span class="title-bar-text" id="snake-title">C:\SITE\snake.exe</span>
+      <div class="title-bar-controls">
+        <button type="button" class="win95-btn snake-close" aria-label="Close">×</button>
+      </div>
+    </div>
+    <div class="game-body">
+      <div class="game-hud">
+        <span>Score: <strong id="snake-score">0</strong></span>
+        <span class="game-hud-status" id="snake-status"></span>
+      </div>
+      <canvas id="snake-canvas" width="320" height="240" aria-label="Snake game"></canvas>
+      <div class="snake-controls" aria-label="Direction controls">
+        <button type="button" class="snake-dir snake-dir-up" data-x="0" data-y="-1" aria-label="Up">↑</button>
+        <button type="button" class="snake-dir snake-dir-left" data-x="-1" data-y="0" aria-label="Left">←</button>
+        <button type="button" class="snake-dir snake-dir-down" data-x="0" data-y="1" aria-label="Down">↓</button>
+        <button type="button" class="snake-dir snake-dir-right" data-x="1" data-y="0" aria-label="Right">→</button>
+      </div>
+      <p class="game-help">Arrow keys, on-screen arrows, or swipe to move.</p>
+      <button type="button" class="win95-link-btn" id="snake-new">New Game</button>
+    </div>
+  </div>
+</div>
