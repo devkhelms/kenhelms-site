@@ -9,12 +9,14 @@
   function closeStartMenu() {
     var startMenu = document.getElementById("start-menu");
     if (startMenu) startMenu.classList.remove("is-open");
+    document.documentElement.classList.remove("start-menu-open");
   }
 
   function openStartMenu() {
     var startMenu = document.getElementById("start-menu");
     if (!startMenu) return;
     startMenu.classList.add("is-open");
+    document.documentElement.classList.add("start-menu-open");
   }
 
   function toggleStartMenu() {

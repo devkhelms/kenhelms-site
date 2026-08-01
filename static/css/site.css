@@ -662,7 +662,8 @@ html.boot-active {
 }
 
 html.boot-active,
-html.overlay-open {
+html.overlay-open,
+html.start-menu-open {
   overflow: hidden;
 }
 
@@ -1337,26 +1338,11 @@ button.win95-btn {
   }
 
   .page {
-    padding: 1rem max(0.65rem, env(safe-area-inset-right)) calc(5rem + env(safe-area-inset-bottom)) max(0.65rem, env(safe-area-inset-left));
+    padding: 1rem max(0.65rem, env(safe-area-inset-right)) 1.5rem max(0.65rem, env(safe-area-inset-left));
   }
 
   .site-footer {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    max-width: none;
-    margin: 0;
-    padding: 0.5rem max(0.65rem, env(safe-area-inset-right)) max(0.5rem, env(safe-area-inset-bottom)) max(0.65rem, env(safe-area-inset-left));
-  }
-
-  .start-menu.is-open {
-    position: fixed;
-    left: max(0.65rem, env(safe-area-inset-left));
-    right: auto;
-    bottom: calc(3.35rem + env(safe-area-inset-bottom));
-    z-index: calc(var(--z-taskbar) + 1);
-    min-width: 11rem;
+    padding: 0.5rem max(0.65rem, env(safe-area-inset-right)) max(1rem, env(safe-area-inset-bottom)) max(0.65rem, env(safe-area-inset-left));
   }
 
   .site-footer .taskbar {
