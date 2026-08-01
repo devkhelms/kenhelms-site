@@ -61,29 +61,32 @@ export async function onRequestPost({ request, env }) {
     return jsonResponse({ error: "Verification failed" }, 403);
   }
 
+  const apiKey = env.RESEND_API_KEY;
+  if (!apiKey) {
+    return jsonResponse({ error: "Server not configured" }, 503);
+  }
+
   const to = env.CONTACT_TO || "ping@kenhelms.dev";
   const from = env.CONTACT_FROM || "forms@kenhelms.dev";
-
   const text = ["Name: " + name, "Email: " + email, "", message].join("\n");
 
-  const mailRes = await fetch("https://api.mailchannels.net/tx/v1/send", {
+  const mailRes = await fetch("https://api.resend.com/emails", {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + apiKey,
+    },
     body: JSON.stringify({
-      personalizations: [
-        {
-          to: [{ email: to }],
-          reply_to: { email, name },
-        },
-      ],
-      from: { email: from, name: "kenhelms.dev" },
+      from: from,
+      to: [to],
+      reply_to: email,
       subject: "ping from " + name,
-      content: [{ type: "text/plain", value: text }],
+      text: text,
     }),
   });
 
   if (!mailRes.ok) {
-    console.error("Mailchannels error", mailRes.status, await mailRes.text());
+    console.error("Resend error", mailRes.status, await mailRes.text());
     return jsonResponse({ error: "Could not send message" }, 502);
   }
 
