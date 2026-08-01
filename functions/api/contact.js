@@ -42,10 +42,16 @@ export async function onRequestPost({ request, env }) {
     return jsonResponse({ error: "Invalid email" }, 400);
   }
 
-  const secret = env.TURNSTILE_SECRET_KEY;
-  if (!secret) {
+  if (!env.TURNSTILE_SECRET_KEY || !env.RESEND_API_KEY) {
+    console.error(
+      "Missing env:",
+      !env.TURNSTILE_SECRET_KEY ? "TURNSTILE_SECRET_KEY" : "",
+      !env.RESEND_API_KEY ? "RESEND_API_KEY" : ""
+    );
     return jsonResponse({ error: "Server not configured" }, 503);
   }
+
+  const secret = env.TURNSTILE_SECRET_KEY;
 
   const verifyRes = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
     method: "POST",
@@ -62,10 +68,6 @@ export async function onRequestPost({ request, env }) {
   }
 
   const apiKey = env.RESEND_API_KEY;
-  if (!apiKey) {
-    return jsonResponse({ error: "Server not configured" }, 503);
-  }
-
   const to = env.CONTACT_TO || "ping@kenhelms.dev";
   const from = env.CONTACT_FROM || "forms@kenhelms.dev";
   const text = ["Name: " + name, "Email: " + email, "", message].join("\n");
