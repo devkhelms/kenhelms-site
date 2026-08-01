@@ -70,6 +70,7 @@
     container.innerHTML = "";
     overlay.classList.remove("is-hidden", "is-fading", "is-reboot-fade");
     overlay.hidden = false;
+    overlay.style.pointerEvents = "";
     overlay.setAttribute("aria-hidden", "false");
     document.documentElement.classList.remove("boot-skip");
     document.documentElement.classList.add("boot-active");

@@ -25,14 +25,20 @@
   }
 
   function loadTurnstile() {
-    if (!siteKey || turnstileLoaded) return Promise.resolve();
-    turnstileLoaded = true;
+    if (!siteKey) return Promise.resolve();
+    if (turnstileLoaded && window.turnstile) return Promise.resolve();
     return new Promise(function (resolve, reject) {
       var s = document.createElement("script");
       s.src = "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit";
       s.async = true;
-      s.onload = resolve;
-      s.onerror = reject;
+      s.onload = function () {
+        turnstileLoaded = true;
+        resolve();
+      };
+      s.onerror = function () {
+        turnstileLoaded = false;
+        reject(new Error("Turnstile failed to load"));
+      };
       document.body.appendChild(s);
     });
   }
@@ -52,11 +58,15 @@
     window.setOverlayOpen(overlay, true);
     setStatus("");
 
-    loadTurnstile().then(function () {
-      renderTurnstile();
-      var nameInput = document.getElementById("contact-name");
-      if (nameInput) nameInput.focus();
-    });
+    loadTurnstile()
+      .then(function () {
+        renderTurnstile();
+        var nameInput = document.getElementById("contact-name");
+        if (nameInput) nameInput.focus();
+      })
+      .catch(function () {
+        setStatus("Verification failed to load. Check your connection.", true);
+      });
   }
 
   function close() {

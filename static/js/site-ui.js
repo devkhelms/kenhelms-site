@@ -4,11 +4,22 @@
     if (el) el.textContent = text;
   }
 
+  function closeStartMenu() {
+    var startMenu = document.getElementById("start-menu");
+    if (startMenu) startMenu.classList.remove("is-open");
+  }
+
   function focusPortfolio() {
     var win = document.getElementById("portfolio-window");
     if (!win) return;
     window.scrollTo(0, 0);
-    win.scrollIntoView(true);
+    if (win.scrollIntoView) {
+      try {
+        win.scrollIntoView({ block: "start", behavior: "instant" });
+      } catch (e) {
+        win.scrollIntoView(true);
+      }
+    }
     win.classList.remove("is-highlight");
     void win.offsetWidth;
     win.classList.add("is-highlight");
@@ -19,16 +30,12 @@
     }, 1200);
   }
 
-  function closeStartMenu() {
-    var startMenu = document.getElementById("start-menu");
-    if (startMenu) startMenu.classList.remove("is-open");
-  }
-
   function openDriveCExplorer() {
     if (window.DriveC) window.DriveC.open();
   }
 
   function handleMenuAction(id) {
+    closeStartMenu();
     switch (id) {
       case "launch-portfolio":
         focusPortfolio();
@@ -53,6 +60,14 @@
       default:
         break;
     }
+  }
+
+  function bindActivate(el, action) {
+    if (!el) return;
+    el.addEventListener("click", function (e) {
+      e.stopPropagation();
+      action();
+    });
   }
 
   function bindStatusHints() {
@@ -94,22 +109,20 @@
     var startWrap = startBtn ? startBtn.closest(".start-wrap") : null;
     if (!startBtn || !startMenu) return;
 
-    startBtn.addEventListener("pointerup", function (e) {
-      e.preventDefault();
+    startBtn.addEventListener("click", function (e) {
       e.stopPropagation();
       startMenu.classList.toggle("is-open");
     });
 
-    startMenu.addEventListener("pointerup", function (e) {
+    startMenu.addEventListener("click", function (e) {
       var item = e.target.closest(".start-menu-item");
       if (!item || !item.id) return;
       e.preventDefault();
       e.stopPropagation();
-      closeStartMenu();
       handleMenuAction(item.id);
     });
 
-    document.addEventListener("pointerdown", function (e) {
+    document.addEventListener("click", function (e) {
       if (!startMenu.classList.contains("is-open")) return;
       if (startWrap && startWrap.contains(e.target)) return;
       closeStartMenu();
@@ -117,37 +130,14 @@
   }
 
   function initDesktopActions() {
-    var openContact = document.getElementById("open-contact");
-    if (openContact) {
-      openContact.addEventListener("pointerup", function (e) {
-        e.preventDefault();
-        if (window.ContactForm) window.ContactForm.open();
-      });
-    }
-
-    var openPasswords = document.getElementById("open-passwords");
-    if (openPasswords) {
-      openPasswords.addEventListener("pointerup", function (e) {
-        e.preventDefault();
-        if (window.PasswordsEgg) window.PasswordsEgg.open();
-      });
-    }
-
-    var openDriveC = document.getElementById("open-drive-c");
-    if (openDriveC) {
-      openDriveC.addEventListener("pointerup", function (e) {
-        e.preventDefault();
-        openDriveCExplorer();
-      });
-    }
-
-    var focusPortfolioBtn = document.getElementById("focus-portfolio");
-    if (focusPortfolioBtn) {
-      focusPortfolioBtn.addEventListener("pointerup", function (e) {
-        e.preventDefault();
-        focusPortfolio();
-      });
-    }
+    bindActivate(document.getElementById("open-contact"), function () {
+      if (window.ContactForm) window.ContactForm.open();
+    });
+    bindActivate(document.getElementById("open-passwords"), function () {
+      if (window.PasswordsEgg) window.PasswordsEgg.open();
+    });
+    bindActivate(document.getElementById("open-drive-c"), openDriveCExplorer);
+    bindActivate(document.getElementById("focus-portfolio"), focusPortfolio);
   }
 
   function updateClock() {

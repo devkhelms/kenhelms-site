@@ -357,7 +357,7 @@ html.boot-skip .boot-overlay,
 .boot-overlay {
   position: fixed;
   inset: 0;
-  z-index: 10003;
+  z-index: 10060;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -643,11 +643,16 @@ html.boot-active {
   text-align: center;
 }
 
+html.boot-active,
+html.overlay-open {
+  overflow: hidden;
+}
+
 .site-footer {
   max-width: 42rem;
   padding: 0.5rem 1rem 2rem;
   position: relative;
-  z-index: 10005;
+  z-index: 10010;
 }
 
 .taskbar {
@@ -677,7 +682,7 @@ html.boot-active {
 
 .start-wrap {
   position: relative;
-  z-index: 10005;
+  z-index: 10011;
 }
 
 .start-menu {
@@ -693,7 +698,7 @@ html.boot-active {
   background: var(--win-gray);
   border: 2px solid;
   border-color: var(--win-light) var(--win-black) var(--win-black) var(--win-light);
-  z-index: 10006;
+  z-index: 10012;
   touch-action: manipulation;
   transition: opacity 0.12s ease;
 }
@@ -754,7 +759,7 @@ button.win95-btn {
 .app-overlays {
   position: fixed;
   inset: 0;
-  z-index: 10000;
+  z-index: 10050;
   pointer-events: none;
   overflow: hidden;
 }
@@ -1295,11 +1300,97 @@ button.win95-btn {
   }
 
   .page {
-    padding: 1rem 0.65rem 4.5rem;
+    padding: 1rem max(0.65rem, env(safe-area-inset-right)) calc(5rem + env(safe-area-inset-bottom)) max(0.65rem, env(safe-area-inset-left));
   }
 
   .site-footer {
-    padding: 0.5rem 0.65rem max(1rem, env(safe-area-inset-bottom));
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    max-width: none;
+    margin: 0;
+    padding: 0.5rem max(0.65rem, env(safe-area-inset-right)) max(0.5rem, env(safe-area-inset-bottom)) max(0.65rem, env(safe-area-inset-left));
+    z-index: 10010;
+  }
+
+  .site-footer .taskbar {
+    max-width: 42rem;
+    margin: 0 auto;
+  }
+
+  .app-overlays {
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .game-overlay:not(.is-hidden),
+  .nedry-overlay:not(.is-hidden) {
+    align-items: flex-start;
+    justify-content: center;
+    min-height: 100dvh;
+    min-height: 100svh;
+    padding: max(0.75rem, env(safe-area-inset-top)) 0.75rem max(0.75rem, env(safe-area-inset-bottom));
+  }
+
+  .game-window,
+  .nedry-dialog {
+    margin: 0.5rem auto;
+    width: min(100%, 22rem);
+  }
+
+  .contact-input,
+  .passwords-input {
+    font-size: 1rem;
+  }
+
+  .start-btn,
+  .start-menu-item {
+    min-height: 2.75rem;
+    padding-block: 0.55rem;
+  }
+
+  .start-menu {
+    max-height: min(24rem, calc(100svh - 5rem));
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .win95-link-btn,
+  .title-bar-controls .win95-btn {
+    min-height: 2.75rem;
+    min-width: 2.75rem;
+    padding: 0.45rem 0.75rem;
+  }
+
+  .title-bar-controls .win95-btn {
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .snake-dir {
+    width: 3rem;
+    height: 3rem;
+    font-size: 1.15rem;
+  }
+
+  .snake-controls {
+    gap: 0.5rem;
+  }
+
+  .drive-folder-btn {
+    min-height: 2.75rem;
+    padding: 0.35rem;
+  }
+
+  .nedry-overlay {
+    overflow-x: hidden;
+  }
+
+  .contact-turnstile {
+    overflow-x: auto;
   }
 
   .desktop-icons {

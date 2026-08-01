@@ -44,7 +44,6 @@
           queueDirection(Number(btn.dataset.x), Number(btn.dataset.y));
         }
         btn.addEventListener("click", steer);
-        btn.addEventListener("touchstart", steer, { passive: false });
       })(dirButtons[i]);
     }
   }
