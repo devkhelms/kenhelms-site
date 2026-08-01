@@ -134,3 +134,25 @@ Logs: **Pages → kenhelms-site → Logs** (real-time) after a form submission.
 ## Security headers
 
 `static/_headers` sets baseline security headers for the static output.
+
+## PASSWORDS.CSV easter egg
+
+Desktop file under **Drive C:** → password prompt → reward image with visitor counter.
+
+| Piece | Location |
+|-------|----------|
+| UI | `layouts/partials/passwords.html`, `static/js/passwords.js` |
+| API | `functions/api/passwords.js` → `POST /api/passwords` |
+| Image | `static/images/quaid.png` |
+| Counter | Cloudflare **KV** binding |
+
+### KV setup (required for visitor count)
+
+1. **Workers & Pages → KV → Create namespace** (e.g. `password-egg`)
+2. **Pages → kenhelms-site → Settings → Bindings → KV namespace**
+   - Variable name: `PASSWORD_EGG_KV`
+   - KV namespace: the one you created
+3. **Redeploy**
+
+Password check is server-side (case-insensitive: `password`). Wrong attempts show a Jurassic Park–style denial dialog. Without KV, the image still unlocks but the counter shows **—**.
+

@@ -90,5 +90,18 @@
         });
       });
     }
+
+    var loadPasswords = lazyLoader("/js/passwords.js", function () {
+      return !!window.PasswordsEgg;
+    });
+
+    var openPasswords = document.getElementById("open-passwords");
+    if (openPasswords) {
+      openPasswords.addEventListener("click", function () {
+        loadPasswords().then(function () {
+          window.PasswordsEgg.open();
+        });
+      });
+    }
   });
 })();

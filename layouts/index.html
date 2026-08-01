@@ -1,14 +1,20 @@
 {{ define "main" }}
 {{ $projects := where hugo.Data.projects "featured" true }}
 <main id="main" class="page">
-  <div class="desktop-icons" aria-hidden="true">
+  <div class="desktop-icons">
     <div class="desktop-icon">
       <span class="icon-folder"></span>
       <span class="icon-label">Portfolio</span>
     </div>
-    <div class="desktop-icon">
-      <span class="icon-drive"></span>
-      <span class="icon-label">Drive C:</span>
+    <div class="desktop-drive-group">
+      <div class="desktop-icon">
+        <span class="icon-drive"></span>
+        <span class="icon-label">Drive C:</span>
+      </div>
+      <button type="button" class="desktop-file" id="open-passwords" aria-label="Open PASSWORDS.CSV">
+        <span class="icon-file-csv" aria-hidden="true"></span>
+        <span class="icon-label">PASSWORDS.CSV</span>
+      </button>
     </div>
   </div>
 

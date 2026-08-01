@@ -51,6 +51,7 @@ hugo.toml          Site config (public Turnstile site key)
 - **Elsewhere**: Contact only
 - Snake easter egg (`static/js/snake.js`)
 - Contact form with Turnstile → Resend
+- `PASSWORDS.CSV` easter egg (password: `password`) — see [docs/CLOUDFLARE.md](docs/CLOUDFLARE.md#passwords-csv-easter-egg)
 
 ## Deployment
 

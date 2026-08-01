@@ -137,6 +137,80 @@ body::before {
   color: var(--win-black);
 }
 
+.desktop-drive-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.desktop-file {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  width: 4.75rem;
+  margin-left: 0.85rem;
+  padding: 0.15rem;
+  font-family: var(--ui);
+  font-size: 0.62rem;
+  line-height: 1.15;
+  color: var(--win-light);
+  text-align: center;
+  text-shadow: 1px 1px 0 var(--win-black);
+  cursor: pointer;
+  background: transparent;
+  border: 1px dotted transparent;
+}
+
+.desktop-file:hover,
+.desktop-file:focus-visible {
+  background: rgba(0, 0, 128, 0.45);
+  border-color: rgba(255, 255, 255, 0.35);
+  outline: none;
+}
+
+.icon-file-csv {
+  display: block;
+  width: 1.85rem;
+  height: 2.15rem;
+  background: linear-gradient(180deg, #ffffff 0%, #ececec 72%, #d8d8d8 100%);
+  border: 2px solid;
+  border-color: var(--win-light) var(--win-black) var(--win-black) var(--win-light);
+  position: relative;
+  box-shadow: 1px 1px 0 rgba(0, 0, 0, 0.35);
+}
+
+.icon-file-csv::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 0.55rem;
+  height: 0.55rem;
+  background: linear-gradient(135deg, #f0f0f0 50%, var(--win-dark) 50%);
+}
+
+.icon-file-csv::after {
+  content: "CSV";
+  position: absolute;
+  left: 0.12rem;
+  right: 0.12rem;
+  bottom: 0.2rem;
+  font-family: var(--ui);
+  font-size: 0.45rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: #006400;
+  background: repeating-linear-gradient(
+    180deg,
+    transparent,
+    transparent 0.18rem,
+    #808080 0.18rem,
+    #808080 0.2rem
+  );
+  padding-top: 0.35rem;
+}
+
 .win95-window {
   position: relative;
   z-index: 1;
@@ -804,6 +878,210 @@ button.win95-btn {
   .cursor {
     animation: none;
     opacity: 1;
+  }
+
+  .nedry-dialog,
+  .nedry-ah,
+  .nedry-avatar {
+    animation: none !important;
+  }
+}
+
+.passwords-prompt-window {
+  width: min(100%, 20rem);
+}
+
+.passwords-prompt-label {
+  margin: 0 0 0.55rem;
+  font-family: var(--ui);
+  font-size: 0.78rem;
+  color: var(--win-black);
+}
+
+.passwords-input {
+  width: 100%;
+  margin-bottom: 0.65rem;
+}
+
+.passwords-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.45rem;
+}
+
+.passwords-reward-window {
+  width: min(100%, 24rem);
+}
+
+.passwords-reward-body {
+  text-align: center;
+}
+
+.passwords-quaid {
+  display: block;
+  width: 100%;
+  max-width: 18rem;
+  height: auto;
+  margin: 0 auto 0.65rem;
+  border: 2px solid;
+  border-color: var(--win-dark) var(--win-light) var(--win-light) var(--win-dark);
+  image-rendering: auto;
+}
+
+.passwords-visitor {
+  margin: 0;
+  font-family: var(--ui);
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--title-blue);
+}
+
+.nedry-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10002;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background: rgba(0, 0, 0, 0.72);
+  animation: nedry-flash 0.35s step-end 3;
+}
+
+.nedry-overlay.is-hidden {
+  display: none;
+}
+
+.nedry-dialog {
+  width: min(100%, 21rem);
+  padding: 0.55rem;
+  background: #c0c0c0;
+  border: 3px solid;
+  border-color: #ffffff #404040 #404040 #ffffff;
+  box-shadow: 4px 4px 0 #000000;
+  animation: nedry-shake 0.55s ease-in-out 2;
+}
+
+.nedry-header {
+  margin: -0.55rem -0.55rem 0.55rem;
+  padding: 0.35rem 0.55rem;
+  font-family: var(--ui);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #ffffff;
+  text-align: center;
+  background: linear-gradient(90deg, #800000, #cc0000);
+  border-bottom: 2px solid #400000;
+}
+
+.nedry-screen {
+  padding: 0.65rem 0.55rem 0.75rem;
+  background: #000000;
+  border: 2px inset #808080;
+}
+
+.nedry-avatar {
+  width: 4.5rem;
+  height: 4.5rem;
+  margin: 0 auto 0.55rem;
+  background:
+    radial-gradient(circle at 50% 35%, #ffd1dc 0%, #e8a598 45%, #c97b6b 100%);
+  border: 2px solid #808080;
+  animation: nedry-bounce 0.45s ease-in-out infinite alternate;
+}
+
+.nedry-avatar::before,
+.nedry-avatar::after {
+  content: "";
+  display: block;
+  position: relative;
+  left: 1.15rem;
+  width: 0.55rem;
+  height: 0.55rem;
+  background: #1a1a1a;
+  border-radius: 50%;
+}
+
+.nedry-avatar::before {
+  top: 1.35rem;
+  box-shadow: 1.65rem 0 0 #1a1a1a;
+}
+
+.nedry-avatar::after {
+  top: 0.55rem;
+  left: 1.55rem;
+  width: 1.4rem;
+  height: 0.65rem;
+  background: transparent;
+  border: 3px solid #1a1a1a;
+  border-top: 0;
+  border-radius: 0 0 1rem 1rem;
+}
+
+.nedry-ah {
+  margin: 0 0 0.35rem;
+  font-family: var(--ui);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #ffff00;
+  text-align: center;
+  animation: nedry-blink 0.35s step-end infinite;
+}
+
+.nedry-message {
+  margin: 0;
+  font-family: var(--ui);
+  font-size: 0.82rem;
+  font-weight: 700;
+  line-height: 1.35;
+  color: #ffffff;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.nedry-dismiss {
+  display: block;
+  margin: 0.65rem auto 0;
+}
+
+@keyframes nedry-shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-6px);
+  }
+  40% {
+    transform: translateX(6px);
+  }
+  60% {
+    transform: translateX(-4px);
+  }
+  80% {
+    transform: translateX(4px);
+  }
+}
+
+@keyframes nedry-blink {
+  50% {
+    opacity: 0.15;
+  }
+}
+
+@keyframes nedry-bounce {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-4px);
+  }
+}
+
+@keyframes nedry-flash {
+  50% {
+    background: rgba(80, 0, 0, 0.55);
   }
 }
 
