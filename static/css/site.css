@@ -351,6 +351,7 @@ html.boot-skip .boot-overlay,
   display: none !important;
   pointer-events: none !important;
   visibility: hidden !important;
+  z-index: -1 !important;
 }
 
 .boot-overlay {
@@ -645,6 +646,8 @@ html.boot-active {
 .site-footer {
   max-width: 42rem;
   padding: 0.5rem 1rem 2rem;
+  position: relative;
+  z-index: 10005;
 }
 
 .taskbar {
@@ -674,10 +677,14 @@ html.boot-active {
 
 .start-wrap {
   position: relative;
+  z-index: 10005;
 }
 
 .start-menu {
-  display: none;
+  display: block;
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
   position: absolute;
   bottom: calc(100% + 2px);
   left: 0;
@@ -686,12 +693,15 @@ html.boot-active {
   background: var(--win-gray);
   border: 2px solid;
   border-color: var(--win-light) var(--win-black) var(--win-black) var(--win-light);
-  z-index: 10004;
+  z-index: 10006;
   touch-action: manipulation;
+  transition: opacity 0.12s ease;
 }
 
 .start-menu.is-open {
-  display: block;
+  visibility: visible;
+  opacity: 1;
+  pointer-events: auto;
 }
 
 .start-menu-item {

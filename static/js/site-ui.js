@@ -1,42 +1,4 @@
 (function () {
-  function loadScript(src) {
-    return new Promise(function (resolve, reject) {
-      var s = document.createElement("script");
-      s.src = src;
-      s.onload = resolve;
-      s.onerror = reject;
-      document.body.appendChild(s);
-    });
-  }
-
-  function lazyLoader(src, ready) {
-    var loaded = false;
-    return function () {
-      if (loaded && ready()) return Promise.resolve();
-      if (loaded) {
-        return new Promise(function (resolve) {
-          var check = setInterval(function () {
-            if (ready()) {
-              clearInterval(check);
-              resolve();
-            }
-          }, 20);
-        });
-      }
-      loaded = true;
-      return loadScript(src).then(function () {
-        return new Promise(function (resolve) {
-          var check = setInterval(function () {
-            if (ready()) {
-              clearInterval(check);
-              resolve();
-            }
-          }, 20);
-        });
-      });
-    };
-  }
-
   function setStatus(text) {
     var el = document.getElementById("status-message");
     if (el) el.textContent = text;
@@ -45,8 +7,8 @@
   function focusPortfolio() {
     var win = document.getElementById("portfolio-window");
     if (!win) return;
-    window.scrollTo({ top: 0, behavior: "smooth" });
-    win.scrollIntoView({ behavior: "smooth", block: "start" });
+    window.scrollTo(0, 0);
+    win.scrollIntoView(true);
     win.classList.remove("is-highlight");
     void win.offsetWidth;
     win.classList.add("is-highlight");
@@ -62,20 +24,35 @@
     if (startMenu) startMenu.classList.remove("is-open");
   }
 
-  function bindMenuAction(el, action) {
-    if (!el) return;
-    el.addEventListener("click", function (e) {
-      e.preventDefault();
-      closeStartMenu();
-      action();
-    });
+  function openDriveCExplorer() {
+    if (window.DriveC) window.DriveC.open();
   }
 
-  function updateClock() {
-    var el = document.getElementById("taskbar-clock");
-    if (!el) return;
-    var now = new Date();
-    el.textContent = now.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
+  function handleMenuAction(id) {
+    switch (id) {
+      case "launch-portfolio":
+        focusPortfolio();
+        break;
+      case "launch-files":
+        setStatus("C:\\");
+        openDriveCExplorer();
+        break;
+      case "launch-snake":
+        if (window.SnakeGame) window.SnakeGame.open();
+        break;
+      case "launch-contact":
+        if (window.ContactForm) window.ContactForm.open();
+        break;
+      case "launch-passwords":
+        if (window.PasswordsEgg) window.PasswordsEgg.open();
+        break;
+      case "launch-reboot":
+        setStatus("Restarting...");
+        if (window.SiteBoot && window.SiteBoot.reboot) window.SiteBoot.reboot();
+        break;
+      default:
+        break;
+    }
   }
 
   function bindStatusHints() {
@@ -109,131 +86,80 @@
         setStatus("Ready");
       });
     });
-
-    var projects = document.getElementById("projects");
-    if (projects) {
-      projects.addEventListener("mouseenter", function () {
-        setStatus("Projects");
-      });
-      projects.addEventListener("mouseleave", function () {
-        setStatus("Ready");
-      });
-    }
-
-    var elsewhere = document.getElementById("elsewhere");
-    if (elsewhere) {
-      elsewhere.addEventListener("mouseenter", function () {
-        setStatus("Elsewhere");
-      });
-      elsewhere.addEventListener("mouseleave", function () {
-        setStatus("Ready");
-      });
-    }
   }
 
-  document.addEventListener("DOMContentLoaded", function () {
+  function initStartMenu() {
     var startBtn = document.getElementById("start-btn");
     var startMenu = document.getElementById("start-menu");
     var startWrap = startBtn ? startBtn.closest(".start-wrap") : null;
+    if (!startBtn || !startMenu) return;
 
-    if (startBtn && startMenu) {
-      startBtn.addEventListener("click", function (e) {
-        e.stopPropagation();
-        startMenu.classList.toggle("is-open");
-      });
-      document.addEventListener("click", function (e) {
-        if (!startMenu.classList.contains("is-open")) return;
-        if (startWrap && startWrap.contains(e.target)) return;
-        closeStartMenu();
-      });
-    }
-
-    var loadSnake = lazyLoader("/js/snake.js", function () {
-      return !!window.SnakeGame;
+    startBtn.addEventListener("pointerup", function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      startMenu.classList.toggle("is-open");
     });
 
-    var loadContact = lazyLoader("/js/contact.js", function () {
-      return !!window.ContactForm;
+    startMenu.addEventListener("pointerup", function (e) {
+      var item = e.target.closest(".start-menu-item");
+      if (!item || !item.id) return;
+      e.preventDefault();
+      e.stopPropagation();
+      closeStartMenu();
+      handleMenuAction(item.id);
     });
 
-    var loadPasswords = lazyLoader("/js/passwords.js", function () {
-      return !!window.PasswordsEgg;
+    document.addEventListener("pointerdown", function (e) {
+      if (!startMenu.classList.contains("is-open")) return;
+      if (startWrap && startWrap.contains(e.target)) return;
+      closeStartMenu();
     });
+  }
 
-    var loadDriveC = lazyLoader("/js/drive-c.js", function () {
-      return !!window.DriveC;
-    });
-
-    function openDriveCExplorer() {
-      loadDriveC().then(function () {
-        window.DriveC.open();
-      });
-    }
-
-    var launchSnake = document.getElementById("launch-snake");
-    bindMenuAction(launchSnake, function () {
-      loadSnake().then(function () {
-        window.SnakeGame.open();
-      });
-    });
-
-    var launchContact = document.getElementById("launch-contact");
-    bindMenuAction(launchContact, function () {
-      loadContact().then(function () {
-        window.ContactForm.open();
-      });
-    });
-
-    var launchPasswords = document.getElementById("launch-passwords");
-    bindMenuAction(launchPasswords, function () {
-      loadPasswords().then(function () {
-        window.PasswordsEgg.open();
-      });
-    });
-
-    var launchPortfolio = document.getElementById("launch-portfolio");
-    bindMenuAction(launchPortfolio, focusPortfolio);
-
-    var launchFiles = document.getElementById("launch-files");
-    bindMenuAction(launchFiles, function () {
-      setStatus("C:\\");
-      openDriveCExplorer();
-    });
-
-    var launchReboot = document.getElementById("launch-reboot");
-    bindMenuAction(launchReboot, function () {
-      setStatus("Restarting...");
-      if (window.SiteBoot && window.SiteBoot.reboot) window.SiteBoot.reboot();
-    });
-
+  function initDesktopActions() {
     var openContact = document.getElementById("open-contact");
     if (openContact) {
-      openContact.addEventListener("click", function () {
-        loadContact().then(function () {
-          window.ContactForm.open();
-        });
+      openContact.addEventListener("pointerup", function (e) {
+        e.preventDefault();
+        if (window.ContactForm) window.ContactForm.open();
       });
     }
 
     var openPasswords = document.getElementById("open-passwords");
     if (openPasswords) {
-      openPasswords.addEventListener("click", function () {
-        loadPasswords().then(function () {
-          window.PasswordsEgg.open();
-        });
+      openPasswords.addEventListener("pointerup", function (e) {
+        e.preventDefault();
+        if (window.PasswordsEgg) window.PasswordsEgg.open();
       });
     }
 
     var openDriveC = document.getElementById("open-drive-c");
     if (openDriveC) {
-      openDriveC.addEventListener("click", openDriveCExplorer);
+      openDriveC.addEventListener("pointerup", function (e) {
+        e.preventDefault();
+        openDriveCExplorer();
+      });
     }
 
     var focusPortfolioBtn = document.getElementById("focus-portfolio");
     if (focusPortfolioBtn) {
-      focusPortfolioBtn.addEventListener("click", focusPortfolio);
+      focusPortfolioBtn.addEventListener("pointerup", function (e) {
+        e.preventDefault();
+        focusPortfolio();
+      });
     }
+  }
 
+  function updateClock() {
+    var el = document.getElementById("taskbar-clock");
+    if (!el) return;
+    var now = new Date();
+    el.textContent = now.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
+  }
+
+  document.addEventListener("DOMContentLoaded", function () {
+    initStartMenu();
+    initDesktopActions();
     updateClock();
     setInterval(updateClock, 30000);
     bindStatusHints();
