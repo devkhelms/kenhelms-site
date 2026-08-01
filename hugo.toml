@@ -10,5 +10,4 @@ disableKinds = ['taxonomy', 'term']
 
 [params]
   tagline = 'I build things that stay out of the way.'
-  github = 'https://github.com/devkhelms'
   turnstileSiteKey = '0x4AAAAAAEDwg8rCdzfIJysz'
