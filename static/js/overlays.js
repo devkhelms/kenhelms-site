@@ -11,9 +11,17 @@
   window.setOverlayOpen = function (el, open) {
     if (!el) return;
     var wasOpen = !el.hidden && !el.classList.contains("is-hidden");
-    el.classList.toggle("is-hidden", !open);
-    el.hidden = !open;
+
+    if (open) {
+      el.classList.remove("is-hidden");
+      el.removeAttribute("hidden");
+    } else {
+      el.classList.add("is-hidden");
+      el.setAttribute("hidden", "");
+    }
+
     el.setAttribute("aria-hidden", open ? "false" : "true");
+
     if (open && !wasOpen) openCount += 1;
     if (!open && wasOpen) openCount = Math.max(0, openCount - 1);
     syncBodyLock();

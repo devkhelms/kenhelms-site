@@ -1,6 +1,4 @@
 (function () {
-  var lastMenuAction = { id: "", at: 0 };
-
   function setStatus(text) {
     var el = document.getElementById("status-message");
     if (el) el.textContent = text;
@@ -52,16 +50,11 @@
   }
 
   function openDriveCExplorer() {
-    if (window.DriveC && window.DriveC.open) window.DriveC.open();
+    if (window.DriveC) window.DriveC.open();
   }
 
   function handleMenuAction(id) {
-    var now = Date.now();
-    if (lastMenuAction.id === id && now - lastMenuAction.at < 400) return;
-    lastMenuAction = { id: id, at: now };
-
     closeStartMenu();
-
     switch (id) {
       case "launch-portfolio":
         focusPortfolio();
@@ -71,13 +64,13 @@
         openDriveCExplorer();
         break;
       case "launch-snake":
-        if (window.SnakeGame && window.SnakeGame.open) window.SnakeGame.open();
+        if (window.SnakeGame) window.SnakeGame.open();
         break;
       case "launch-contact":
-        if (window.ContactForm && window.ContactForm.open) window.ContactForm.open();
+        if (window.ContactForm) window.ContactForm.open();
         break;
       case "launch-passwords":
-        if (window.PasswordsEgg && window.PasswordsEgg.open) window.PasswordsEgg.open();
+        if (window.PasswordsEgg) window.PasswordsEgg.open();
         break;
       case "launch-reboot":
         setStatus("Restarting...");
@@ -86,6 +79,24 @@
       default:
         break;
     }
+  }
+
+  function bindActivate(el, action) {
+    if (!el) return;
+    var lastRun = 0;
+    function run(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      var now = Date.now();
+      if (now - lastRun < 450) return;
+      lastRun = now;
+      action();
+    }
+    el.addEventListener("click", run);
+    el.addEventListener("pointerup", function (e) {
+      if (e.pointerType === "mouse" && e.button !== 0) return;
+      run(e);
+    });
   }
 
   function bindStatusHints() {
@@ -121,24 +132,32 @@
     });
   }
 
+  function bindMenuItem(id) {
+    var item = document.getElementById(id);
+    if (!item) return;
+    bindActivate(item, function () {
+      handleMenuAction(id);
+    });
+  }
+
   function initStartMenu() {
+    var startBtn = document.getElementById("start-btn");
     var startMenu = document.getElementById("start-menu");
-    var startWrap = document.querySelector(".start-wrap");
-    if (!startMenu) return;
+    var startWrap = startBtn ? startBtn.closest(".start-wrap") : null;
+    if (!startBtn || !startMenu) return;
 
-    startMenu.addEventListener(
-      "click",
-      function (e) {
-        var item = e.target.closest(".start-menu-item");
-        if (!item || !item.id) return;
-        e.preventDefault();
-        e.stopPropagation();
-        handleMenuAction(item.id);
-      },
-      true
-    );
+    bindActivate(startBtn, toggleStartMenu);
 
-    document.addEventListener("click", function (e) {
+    [
+      "launch-portfolio",
+      "launch-files",
+      "launch-snake",
+      "launch-contact",
+      "launch-passwords",
+      "launch-reboot",
+    ].forEach(bindMenuItem);
+
+    document.addEventListener("pointerdown", function (e) {
       if (!startMenu.classList.contains("is-open")) return;
       if (startMenu.contains(e.target)) return;
       if (startWrap && startWrap.contains(e.target)) return;
@@ -147,22 +166,14 @@
   }
 
   function initDesktopActions() {
-    function bind(el, action) {
-      if (!el) return;
-      el.addEventListener("click", function (e) {
-        e.preventDefault();
-        action();
-      });
-    }
-
-    bind(document.getElementById("open-contact"), function () {
-      if (window.ContactForm && window.ContactForm.open) window.ContactForm.open();
+    bindActivate(document.getElementById("open-contact"), function () {
+      if (window.ContactForm) window.ContactForm.open();
     });
-    bind(document.getElementById("open-passwords"), function () {
-      if (window.PasswordsEgg && window.PasswordsEgg.open) window.PasswordsEgg.open();
+    bindActivate(document.getElementById("open-passwords"), function () {
+      if (window.PasswordsEgg) window.PasswordsEgg.open();
     });
-    bind(document.getElementById("open-drive-c"), openDriveCExplorer);
-    bind(document.getElementById("focus-portfolio"), focusPortfolio);
+    bindActivate(document.getElementById("open-drive-c"), openDriveCExplorer);
+    bindActivate(document.getElementById("focus-portfolio"), focusPortfolio);
   }
 
   function updateClock() {
@@ -170,13 +181,6 @@
     if (!el) return;
     var now = new Date();
     el.textContent = now.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
-  }
-
-  window.__handleMenuAction = handleMenuAction;
-  window.__toggleStartMenu = toggleStartMenu;
-
-  if (window.SiteMenu) {
-    window.SiteMenu._ready = true;
   }
 
   document.addEventListener("DOMContentLoaded", function () {

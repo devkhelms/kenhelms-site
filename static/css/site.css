@@ -752,8 +752,13 @@ button.win95-btn {
   background: rgba(0, 0, 0, 0.45);
 }
 
-.game-overlay.is-hidden {
+.game-overlay.is-hidden,
+.game-overlay[hidden] {
   display: none !important;
+}
+
+.game-overlay:not(.is-hidden):not([hidden]) {
+  display: flex !important;
 }
 
 .app-overlays {
@@ -1315,15 +1320,19 @@ button.win95-btn {
     max-width: none;
     margin: 0;
     padding: 0.5rem max(0.65rem, env(safe-area-inset-right)) max(0.5rem, env(safe-area-inset-bottom)) max(0.65rem, env(safe-area-inset-left));
-    z-index: 10010;
+    z-index: 10070;
   }
 
   html.start-menu-open .site-footer {
-    z-index: 10055;
+    z-index: 10070;
   }
 
   html.start-menu-open .app-overlays[aria-hidden="true"] {
     z-index: 9000;
+  }
+
+  html.overlay-open .app-overlays {
+    z-index: 10080;
   }
 
   .start-menu.is-open {
@@ -1331,7 +1340,7 @@ button.win95-btn {
     left: max(0.65rem, env(safe-area-inset-left));
     right: auto;
     bottom: calc(3.35rem + env(safe-area-inset-bottom));
-    z-index: 10056;
+    z-index: 10071;
     min-width: 11rem;
   }
 
