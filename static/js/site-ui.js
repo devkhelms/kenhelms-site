@@ -73,6 +73,7 @@
       "launch-contact": "Contact",
       "launch-passwords": "PASSWORDS.CSV",
       "launch-portfolio": "Portfolio",
+      "launch-files": "C:\\",
       "launch-reboot": "Restart system",
       "start-btn": "Start menu",
     };
@@ -148,6 +149,12 @@
       return !!window.DriveC;
     });
 
+    function openDriveCExplorer() {
+      loadDriveC().then(function () {
+        window.DriveC.open();
+      });
+    }
+
     var launchSnake = document.getElementById("launch-snake");
     if (launchSnake) {
       launchSnake.addEventListener("click", function () {
@@ -186,6 +193,15 @@
       });
     }
 
+    var launchFiles = document.getElementById("launch-files");
+    if (launchFiles) {
+      launchFiles.addEventListener("click", function () {
+        if (startMenu) startMenu.classList.remove("is-open");
+        setStatus("C:\\");
+        openDriveCExplorer();
+      });
+    }
+
     var launchReboot = document.getElementById("launch-reboot");
     if (launchReboot) {
       launchReboot.addEventListener("click", function () {
@@ -215,11 +231,7 @@
 
     var openDriveC = document.getElementById("open-drive-c");
     if (openDriveC) {
-      openDriveC.addEventListener("click", function () {
-        loadDriveC().then(function () {
-          window.DriveC.open();
-        });
-      });
+      openDriveC.addEventListener("click", openDriveCExplorer);
     }
 
     var focusPortfolioBtn = document.getElementById("focus-portfolio");

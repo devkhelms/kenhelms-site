@@ -1282,7 +1282,7 @@ button.win95-btn {
   }
 
   .page {
-    padding: 1rem 0.65rem 7rem;
+    padding: 1rem 0.65rem 4.5rem;
   }
 
   .site-footer {
@@ -1290,27 +1290,7 @@ button.win95-btn {
   }
 
   .desktop-icons {
-    top: auto;
-    bottom: calc(3.1rem + env(safe-area-inset-bottom));
-    left: 0;
-    right: 0;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: flex-start;
-    gap: 0.35rem 0.5rem;
-    padding: 0.25rem 0.5rem 0;
-    transform: none;
-    transform-origin: initial;
-  }
-
-  .desktop-drive-group {
-    flex-direction: row;
-    gap: 0.35rem;
-  }
-
-  .desktop-file {
-    margin-left: 0;
+    display: none;
   }
 
   .menu-bar {
