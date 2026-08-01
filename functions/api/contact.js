@@ -8,6 +8,12 @@ function clean(value) {
   return String(value || "").trim();
 }
 
+function envValue(env, key) {
+  const value = env[key];
+  if (value === undefined || value === null) return "";
+  return clean(value).replace(/^["']+|["']+$/g, "");
+}
+
 function validEmail(value) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
 }
@@ -29,11 +35,15 @@ async function resendFailureMessage(response) {
     const msg = String(data.message || data.error || "");
 
     if (msg.includes("only send testing emails")) {
-      return "Sandbox mode: set CONTACT_TO to your Proton address, or verify kenhelms.dev in Resend.";
+      return "Sandbox mode: set CONTACT_TO to your inbox, or verify kenhelms.dev in Resend.";
     }
 
     if (msg.includes("verify a domain") || msg.includes("not verified")) {
       return "Verify kenhelms.dev in Resend before using forms@kenhelms.dev.";
+    }
+
+    if (msg.includes("suppression") || msg.includes("Suppression")) {
+      return "Recipient blocked by Resend. Check Suppressions in the Resend dashboard.";
     }
 
     if (response.status === 401 || msg.toLowerCase().includes("api key")) {
@@ -80,17 +90,17 @@ export async function onRequestPost({ request, env }) {
     return jsonResponse({ error: "Invalid email" }, 400);
   }
 
-  if (!env.TURNSTILE_SECRET_KEY || !env.RESEND_API_KEY || !env.CONTACT_TO) {
+  if (!envValue(env, "TURNSTILE_SECRET_KEY") || !envValue(env, "RESEND_API_KEY") || !envValue(env, "CONTACT_TO")) {
     console.error(
       "Missing env:",
-      !env.TURNSTILE_SECRET_KEY ? "TURNSTILE_SECRET_KEY" : "",
-      !env.RESEND_API_KEY ? "RESEND_API_KEY" : "",
-      !env.CONTACT_TO ? "CONTACT_TO" : ""
+      !envValue(env, "TURNSTILE_SECRET_KEY") ? "TURNSTILE_SECRET_KEY" : "",
+      !envValue(env, "RESEND_API_KEY") ? "RESEND_API_KEY" : "",
+      !envValue(env, "CONTACT_TO") ? "CONTACT_TO" : ""
     );
     return jsonResponse({ error: "Server not configured" }, 503);
   }
 
-  const secret = env.TURNSTILE_SECRET_KEY;
+  const secret = envValue(env, "TURNSTILE_SECRET_KEY");
 
   const verifyRes = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
     method: "POST",
@@ -106,15 +116,20 @@ export async function onRequestPost({ request, env }) {
     return jsonResponse({ error: "Verification failed" }, 403);
   }
 
-  const apiKey = env.RESEND_API_KEY;
-  const to = env.CONTACT_TO;
-  const from = env.CONTACT_FROM || "forms@kenhelms.dev";
+  const apiKey = envValue(env, "RESEND_API_KEY");
+  const to = envValue(env, "CONTACT_TO");
+  const from = envValue(env, "CONTACT_FROM") || "forms@kenhelms.dev";
   const text = ["Name: " + name, "Email: " + email, "", message].join("\n");
   const html = [
     "<p><strong>Name:</strong> " + escapeHtml(name) + "</p>",
     "<p><strong>Email:</strong> " + escapeHtml(email) + "</p>",
     "<p>" + escapeHtml(message).replace(/\n/g, "<br>") + "</p>",
   ].join("\n");
+
+  if (!validEmail(to)) {
+    console.error("Invalid CONTACT_TO");
+    return jsonResponse({ error: "Server not configured" }, 503);
+  }
 
   const fromHeader = from.endsWith("@kenhelms.dev") ? "kenhelms.dev <" + from + ">" : from;
 
