@@ -2,6 +2,10 @@
   var explorerOverlay, imageOverlay, imageEl, imageTitleEl;
   var bound = false;
 
+  function setOpen(el, open) {
+    window.setOverlayOpen(el, open);
+  }
+
   function init() {
     explorerOverlay = document.getElementById("drive-c-overlay");
     imageOverlay = document.getElementById("drive-c-image-overlay");
@@ -33,8 +37,8 @@
 
       document.addEventListener("keydown", function (e) {
         if (e.key !== "Escape") return;
-        if (imageOverlay && !imageOverlay.classList.contains("is-hidden")) closeImage();
-        else if (explorerOverlay && !explorerOverlay.classList.contains("is-hidden")) closeExplorer();
+        if (imageOverlay && !imageOverlay.hidden) closeImage();
+        else if (explorerOverlay && !explorerOverlay.hidden) closeExplorer();
       });
     }
   }
@@ -44,14 +48,12 @@
     if (!explorerOverlay) return;
 
     closeImage();
-    explorerOverlay.classList.remove("is-hidden");
-    explorerOverlay.setAttribute("aria-hidden", "false");
+    setOpen(explorerOverlay, true);
   }
 
   function closeExplorer() {
     if (!explorerOverlay) return;
-    explorerOverlay.classList.add("is-hidden");
-    explorerOverlay.setAttribute("aria-hidden", "true");
+    setOpen(explorerOverlay, false);
     closeImage();
   }
 
@@ -65,14 +67,12 @@
     imageEl.src = src;
     imageEl.alt = title || "Image";
 
-    imageOverlay.classList.remove("is-hidden");
-    imageOverlay.setAttribute("aria-hidden", "false");
+    setOpen(imageOverlay, true);
   }
 
   function closeImage() {
     if (!imageOverlay) return;
-    imageOverlay.classList.add("is-hidden");
-    imageOverlay.setAttribute("aria-hidden", "true");
+    setOpen(imageOverlay, false);
     if (imageEl) {
       imageEl.removeAttribute("src");
       imageEl.alt = "";

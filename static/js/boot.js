@@ -29,6 +29,7 @@
     var overlay = document.getElementById("boot-overlay");
     if (overlay) {
       overlay.classList.add("is-hidden");
+      overlay.hidden = true;
       overlay.classList.remove("is-reboot-fade");
     }
   }
@@ -68,6 +69,7 @@
 
     container.innerHTML = "";
     overlay.classList.remove("is-hidden", "is-fading", "is-reboot-fade");
+    overlay.hidden = false;
     overlay.setAttribute("aria-hidden", "false");
     document.documentElement.classList.remove("boot-skip");
     document.documentElement.classList.add("boot-active");

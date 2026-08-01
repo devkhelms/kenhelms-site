@@ -20,7 +20,7 @@
 
     form.addEventListener("submit", onSubmit);
     document.addEventListener("keydown", function (e) {
-      if (e.key === "Escape" && !overlay.classList.contains("is-hidden")) close();
+      if (e.key === "Escape" && overlay && !overlay.hidden) close();
     });
   }
 
@@ -49,8 +49,7 @@
     if (!overlay) init();
     if (!overlay) return;
 
-    overlay.classList.remove("is-hidden");
-    overlay.setAttribute("aria-hidden", "false");
+    window.setOverlayOpen(overlay, true);
     setStatus("");
 
     loadTurnstile().then(function () {
@@ -61,8 +60,7 @@
   }
 
   function close() {
-    overlay.classList.add("is-hidden");
-    overlay.setAttribute("aria-hidden", "true");
+    window.setOverlayOpen(overlay, false);
     setStatus("");
     form.reset();
     if (window.turnstile) {

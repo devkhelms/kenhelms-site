@@ -53,16 +53,14 @@
     if (!overlay) init();
     if (!overlay) return;
 
-    overlay.classList.remove("is-hidden");
-    overlay.setAttribute("aria-hidden", "false");
+    window.setOverlayOpen(overlay, true);
     resetGame();
     if (closeBtn) closeBtn.focus();
   }
 
   function close() {
     stopLoop();
-    overlay.classList.add("is-hidden");
-    overlay.setAttribute("aria-hidden", "true");
+    window.setOverlayOpen(overlay, false);
     var startMenu = document.getElementById("start-menu");
     if (startMenu) startMenu.classList.remove("is-open");
   }
@@ -186,7 +184,7 @@
   }
 
   function onKeyDown(e) {
-    if (overlay.classList.contains("is-hidden")) return;
+    if (!overlay || overlay.hidden) return;
 
     switch (e.key) {
       case "ArrowUp":

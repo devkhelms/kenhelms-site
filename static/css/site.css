@@ -20,6 +20,10 @@
   box-sizing: border-box;
 }
 
+[hidden] {
+  display: none !important;
+}
+
 html {
   scroll-behavior: smooth;
 }
@@ -731,7 +735,20 @@ button.win95-btn {
 }
 
 .game-overlay.is-hidden {
-  display: none;
+  display: none !important;
+}
+
+.app-overlays {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.app-overlays .game-overlay:not(.is-hidden),
+.app-overlays .nedry-overlay:not(.is-hidden) {
+  pointer-events: auto;
 }
 
 .game-window {
@@ -1123,7 +1140,7 @@ button.win95-btn {
 }
 
 .nedry-overlay.is-hidden {
-  display: none;
+  display: none !important;
 }
 
 .nedry-dialog {
@@ -1260,9 +1277,8 @@ button.win95-btn {
 }
 
 @media (max-width: 768px) {
-  html,
-  body {
-    overflow-x: hidden;
+  html {
+    overflow-x: clip;
   }
 
   .page {
@@ -1310,7 +1326,7 @@ button.win95-btn {
   }
 
   .boot-lines {
-    font-size: 0.78rem;
+    display: none;
   }
 
   .site-header {

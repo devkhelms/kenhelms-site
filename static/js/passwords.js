@@ -4,6 +4,10 @@
   var nedryTimer;
   var bound = false;
 
+  function setOpen(el, open) {
+    window.setOverlayOpen(el, open);
+  }
+
   function isCorrectPassword(value) {
     return String(value || "").trim().toLowerCase() === "password";
   }
@@ -43,9 +47,9 @@
 
       document.addEventListener("keydown", function (e) {
         if (e.key === "Escape") {
-          if (nedryOverlay && !nedryOverlay.classList.contains("is-hidden")) closeNedry();
-          else if (rewardOverlay && !rewardOverlay.classList.contains("is-hidden")) closeReward();
-          else if (promptOverlay && !promptOverlay.classList.contains("is-hidden")) closePrompt();
+          if (nedryOverlay && !nedryOverlay.hidden) closeNedry();
+          else if (rewardOverlay && !rewardOverlay.hidden) closeReward();
+          else if (promptOverlay && !promptOverlay.hidden) closePrompt();
         }
       });
     }
@@ -57,23 +61,20 @@
 
     closeReward();
     closeNedry();
-    promptOverlay.classList.remove("is-hidden");
-    promptOverlay.setAttribute("aria-hidden", "false");
+    setOpen(promptOverlay, true);
     form.reset();
     if (input) input.focus();
   }
 
   function closePrompt() {
     if (!promptOverlay) return;
-    promptOverlay.classList.add("is-hidden");
-    promptOverlay.setAttribute("aria-hidden", "true");
+    setOpen(promptOverlay, false);
     form.reset();
   }
 
   function closeReward() {
     if (!rewardOverlay) return;
-    rewardOverlay.classList.add("is-hidden");
-    rewardOverlay.setAttribute("aria-hidden", "true");
+    setOpen(rewardOverlay, false);
     if (quaidImg) {
       quaidImg.removeAttribute("src");
       quaidImg.alt = "";
@@ -82,8 +83,7 @@
 
   function showNedry() {
     if (!nedryOverlay) return;
-    nedryOverlay.classList.remove("is-hidden");
-    nedryOverlay.setAttribute("aria-hidden", "false");
+    setOpen(nedryOverlay, true);
     clearTimeout(nedryTimer);
     nedryTimer = setTimeout(closeNedry, 5000);
   }
@@ -91,8 +91,7 @@
   function closeNedry() {
     if (!nedryOverlay) return;
     clearTimeout(nedryTimer);
-    nedryOverlay.classList.add("is-hidden");
-    nedryOverlay.setAttribute("aria-hidden", "true");
+    setOpen(nedryOverlay, false);
   }
 
   function formatCount(n) {
@@ -111,8 +110,7 @@
     }
     if (countEl) countEl.textContent = formatCount(count);
 
-    rewardOverlay.classList.remove("is-hidden");
-    rewardOverlay.setAttribute("aria-hidden", "false");
+    setOpen(rewardOverlay, true);
   }
 
   function parseJsonResponse(res) {
