@@ -43,7 +43,7 @@ hugo.toml             Site config
 
 ## Content
 
-- **Projects** — edit `data/projects.yaml`. Link keys: `project_site`, `repo`, `demo`, `writeup`.
+- **Projects** — edit `data/projects.yaml`. Set `links.project_site` to the live URL.
 - **Tagline** — `hugo.toml` → `[params].tagline`
 
 ## Features

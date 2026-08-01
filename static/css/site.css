@@ -517,26 +517,13 @@ html.boot-active {
   color: var(--dos-text);
 }
 
-.project-links {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  font-size: 0.9rem;
-  line-height: 1.5;
+.project-open {
+  margin: 0;
 }
 
-.project-link-sep {
-  color: var(--dos-muted);
-}
-
-.project-links a {
-  color: var(--dos-link);
-  text-decoration: none;
-}
-
-.project-links a:hover {
-  color: var(--win-light);
-  background: var(--title-blue);
+.project-open .win95-link-btn {
+  min-width: 4.5rem;
+  text-align: center;
 }
 
 .win95-link-btn {

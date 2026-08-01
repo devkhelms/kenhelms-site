@@ -2,12 +2,10 @@
   description: "A lightweight, self-hosted ops tracker built for IT generalists. Log break/fix work, track assets, document maintenance, and keep a searchable record of everything you've touched, years into the future."
   links:
     project_site: "https://devkhelms.github.io/Fieldlog/"
-    repo: "https://github.com/devkhelms/Fieldlog"
   featured: true
 
 - title: "Sitaware"
   description: "Situational awareness board for small emergency management agencies. Priority updates, email and SMS alerts, live shared view with weather and radar."
   links:
     project_site: "https://cityofmonmouth.github.io/sitaware/"
-    repo: "https://github.com/CityofMonmouth/sitaware"
   featured: true
