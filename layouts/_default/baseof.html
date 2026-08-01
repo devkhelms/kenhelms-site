@@ -5,11 +5,14 @@
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
+  {{ partial "boot.html" . }}
   {{ block "main" . }}{{ end }}
   {{ partial "footer.html" . }}
   {{ partial "snake.html" . }}
   {{ partial "contact.html" . }}
   {{ partial "passwords.html" . }}
+  {{ partial "drive-c.html" . }}
+  <script src="{{ "js/boot.js" | relURL }}"></script>
   <script src="{{ "js/site-ui.js" | relURL }}"></script>
 </body>
 </html>

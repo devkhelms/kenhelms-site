@@ -37,6 +37,83 @@
     };
   }
 
+  function setStatus(text) {
+    var el = document.getElementById("status-message");
+    if (el) el.textContent = text;
+  }
+
+  function focusPortfolio() {
+    var win = document.getElementById("portfolio-window");
+    if (!win) return;
+    win.scrollIntoView({ behavior: "smooth", block: "center" });
+    win.classList.remove("is-highlight");
+    void win.offsetWidth;
+    win.classList.add("is-highlight");
+    setStatus("Portfolio");
+    setTimeout(function () {
+      win.classList.remove("is-highlight");
+      setStatus("Ready");
+    }, 1200);
+  }
+
+  function updateClock() {
+    var el = document.getElementById("taskbar-clock");
+    if (!el) return;
+    var now = new Date();
+    el.textContent = now.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
+  }
+
+  function bindStatusHints() {
+    var defaults = {
+      "focus-portfolio": "Open portfolio window",
+      "open-passwords": "C:\\PASSWORDS.CSV",
+      "open-drive-c": "C:\\",
+      "open-contact": "Launch contact form",
+      "launch-snake": "Snake",
+      "launch-contact": "Contact",
+      "launch-passwords": "PASSWORDS.CSV",
+      "launch-portfolio": "Portfolio",
+      "start-btn": "Start menu",
+    };
+
+    Object.keys(defaults).forEach(function (id) {
+      var node = document.getElementById(id);
+      if (!node) return;
+      node.addEventListener("mouseenter", function () {
+        setStatus(defaults[id]);
+      });
+      node.addEventListener("mouseleave", function () {
+        setStatus("Ready");
+      });
+      node.addEventListener("focus", function () {
+        setStatus(defaults[id]);
+      });
+      node.addEventListener("blur", function () {
+        setStatus("Ready");
+      });
+    });
+
+    var projects = document.getElementById("projects");
+    if (projects) {
+      projects.addEventListener("mouseenter", function () {
+        setStatus("Projects");
+      });
+      projects.addEventListener("mouseleave", function () {
+        setStatus("Ready");
+      });
+    }
+
+    var elsewhere = document.getElementById("elsewhere");
+    if (elsewhere) {
+      elsewhere.addEventListener("mouseenter", function () {
+        setStatus("Elsewhere");
+      });
+      elsewhere.addEventListener("mouseleave", function () {
+        setStatus("Ready");
+      });
+    }
+  }
+
   document.addEventListener("DOMContentLoaded", function () {
     var startBtn = document.getElementById("start-btn");
     var startMenu = document.getElementById("start-menu");
@@ -62,6 +139,14 @@
       return !!window.ContactForm;
     });
 
+    var loadPasswords = lazyLoader("/js/passwords.js", function () {
+      return !!window.PasswordsEgg;
+    });
+
+    var loadDriveC = lazyLoader("/js/drive-c.js", function () {
+      return !!window.DriveC;
+    });
+
     var launchSnake = document.getElementById("launch-snake");
     if (launchSnake) {
       launchSnake.addEventListener("click", function () {
@@ -82,6 +167,24 @@
       });
     }
 
+    var launchPasswords = document.getElementById("launch-passwords");
+    if (launchPasswords) {
+      launchPasswords.addEventListener("click", function () {
+        if (startMenu) startMenu.classList.remove("is-open");
+        loadPasswords().then(function () {
+          window.PasswordsEgg.open();
+        });
+      });
+    }
+
+    var launchPortfolio = document.getElementById("launch-portfolio");
+    if (launchPortfolio) {
+      launchPortfolio.addEventListener("click", function () {
+        if (startMenu) startMenu.classList.remove("is-open");
+        focusPortfolio();
+      });
+    }
+
     var openContact = document.getElementById("open-contact");
     if (openContact) {
       openContact.addEventListener("click", function () {
@@ -91,10 +194,6 @@
       });
     }
 
-    var loadPasswords = lazyLoader("/js/passwords.js", function () {
-      return !!window.PasswordsEgg;
-    });
-
     var openPasswords = document.getElementById("open-passwords");
     if (openPasswords) {
       openPasswords.addEventListener("click", function () {
@@ -103,5 +202,23 @@
         });
       });
     }
+
+    var openDriveC = document.getElementById("open-drive-c");
+    if (openDriveC) {
+      openDriveC.addEventListener("click", function () {
+        loadDriveC().then(function () {
+          window.DriveC.open();
+        });
+      });
+    }
+
+    var focusPortfolioBtn = document.getElementById("focus-portfolio");
+    if (focusPortfolioBtn) {
+      focusPortfolioBtn.addEventListener("click", focusPortfolio);
+    }
+
+    updateClock();
+    setInterval(updateClock, 30000);
+    bindStatusHints();
   });
 })();

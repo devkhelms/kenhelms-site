@@ -2,15 +2,15 @@
 {{ $projects := where hugo.Data.projects "featured" true }}
 <main id="main" class="page">
   <div class="desktop-icons">
-    <div class="desktop-icon">
+    <button type="button" class="desktop-icon desktop-icon-btn" id="focus-portfolio" aria-label="Open Portfolio">
       <span class="icon-folder"></span>
       <span class="icon-label">Portfolio</span>
-    </div>
+    </button>
     <div class="desktop-drive-group">
-      <div class="desktop-icon">
+      <button type="button" class="desktop-icon desktop-icon-btn" id="open-drive-c" aria-label="Open Drive C:">
         <span class="icon-drive"></span>
         <span class="icon-label">Drive C:</span>
-      </div>
+      </button>
       <button type="button" class="desktop-file" id="open-passwords" aria-label="Open PASSWORDS.CSV">
         <span class="icon-file-csv" aria-hidden="true"></span>
         <span class="icon-label">PASSWORDS.CSV</span>
@@ -18,7 +18,7 @@
     </div>
   </div>
 
-  <div class="win95-window">
+  <div class="win95-window" id="portfolio-window">
     <div class="title-bar">
       <span class="title-bar-text">C:\SITE\portfolio.exe — MS-DOS Prompt</span>
       <div class="title-bar-controls" aria-hidden="true">
@@ -83,7 +83,7 @@
     </div>
 
     <div class="status-bar" aria-hidden="true">
-      <span class="status-left">Ready</span>
+      <span class="status-left" id="status-message">Ready</span>
       <span class="status-indicators">
         <span>Num</span>
         <span>Caps</span>

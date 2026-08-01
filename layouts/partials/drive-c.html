@@ -1,0 +1,65 @@
+<div class="game-overlay is-hidden" id="drive-c-overlay" aria-hidden="true">
+  <div class="win95-window game-window drive-explorer-window" role="dialog" aria-labelledby="drive-c-title" aria-modal="true">
+    <div class="title-bar">
+      <span class="title-bar-text" id="drive-c-title">C:\</span>
+      <div class="title-bar-controls">
+        <button type="button" class="win95-btn drive-c-close" aria-label="Close">×</button>
+      </div>
+    </div>
+
+    <nav class="menu-bar drive-menu-bar" aria-hidden="true">
+      <span><u>F</u>ile</span>
+      <span><u>E</u>dit</span>
+      <span><u>V</u>iew</span>
+      <span><u>H</u>elp</span>
+    </nav>
+
+    <div class="toolbar drive-toolbar" aria-hidden="true">
+      <span class="toolbar-btn">Back</span>
+      <span class="toolbar-btn">Forward</span>
+      <span class="toolbar-divider"></span>
+      <span class="toolbar-btn">Up</span>
+    </div>
+
+    <div class="drive-address-bar" aria-hidden="true">
+      <span class="drive-address-label">Address</span>
+      <span class="drive-address-path">C:\</span>
+    </div>
+
+    <div class="game-body drive-explorer-body">
+      <div class="drive-folder-grid">
+        <button type="button" class="drive-folder-btn" data-image="buddy-jpeg" data-title="C:\Buddy JPEG\buddy.jpeg">
+          <span class="icon-folder drive-folder-icon" aria-hidden="true"></span>
+          <span class="drive-folder-label">Buddy JPEG</span>
+        </button>
+        <button type="button" class="drive-folder-btn" data-image="buddy-quaid" data-title="C:\Buddy Quaid\buddy.bmp">
+          <span class="icon-folder drive-folder-icon" aria-hidden="true"></span>
+          <span class="drive-folder-label">Buddy Quaid</span>
+        </button>
+        <button type="button" class="drive-folder-btn" data-image="me" data-title="C:\Me\photo.jpeg">
+          <span class="icon-folder drive-folder-icon" aria-hidden="true"></span>
+          <span class="drive-folder-label">Me</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="status-bar drive-status-bar" aria-hidden="true">
+      <span class="status-left">3 object(s)</span>
+      <span class="status-right">Drive C:</span>
+    </div>
+  </div>
+</div>
+
+<div class="game-overlay is-hidden" id="drive-c-image-overlay" aria-hidden="true">
+  <div class="win95-window game-window drive-image-window" role="dialog" aria-labelledby="drive-c-image-title" aria-modal="true">
+    <div class="title-bar">
+      <span class="title-bar-text" id="drive-c-image-title">C:\</span>
+      <div class="title-bar-controls">
+        <button type="button" class="win95-btn drive-c-image-close" aria-label="Close">×</button>
+      </div>
+    </div>
+    <div class="game-body drive-image-body">
+      <img class="drive-image" id="drive-c-image" data-buddy-jpeg="{{ "images/buddy-jpeg.webp" | relURL }}" data-buddy-quaid="{{ "images/buddy-quaid.webp" | relURL }}" data-me="{{ "images/me.webp" | relURL }}" alt="" width="640" height="480">
+    </div>
+  </div>
+</div>

@@ -69,7 +69,6 @@ body::before {
 .page {
   position: relative;
   max-width: 42rem;
-  margin: 0 auto;
   padding: 2.5rem 1rem 0.5rem;
 }
 
@@ -94,6 +93,20 @@ body::before {
   color: var(--win-light);
   text-align: center;
   text-shadow: 1px 1px 0 var(--win-black);
+}
+
+.desktop-icon-btn {
+  padding: 0.15rem;
+  cursor: pointer;
+  background: transparent;
+  border: 1px dotted transparent;
+}
+
+.desktop-icon-btn:hover,
+.desktop-icon-btn:focus-visible {
+  background: rgba(0, 0, 128, 0.45);
+  border-color: rgba(255, 255, 255, 0.35);
+  outline: none;
 }
 
 .icon-folder,
@@ -220,6 +233,11 @@ body::before {
   box-shadow: 1px 1px 0 var(--win-black);
 }
 
+.win95-window.is-highlight {
+  outline: 2px dotted #ffff00;
+  outline-offset: 1px;
+}
+
 .title-bar {
   display: flex;
   align-items: center;
@@ -317,6 +335,59 @@ body::before {
   margin-bottom: 1.25rem;
   font-size: 0.85rem;
   color: var(--dos-green);
+}
+
+html.boot-skip .boot-lines {
+  display: none;
+}
+
+html.boot-skip .boot-overlay {
+  display: none;
+}
+
+.boot-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10003;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  background: #000000;
+}
+
+.boot-overlay.is-hidden {
+  display: none;
+}
+
+.boot-overlay.is-fading {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.boot-overlay-inner {
+  width: min(100%, 36rem);
+}
+
+.boot-overlay-lines {
+  min-height: 11rem;
+  font-size: 0.9rem;
+  color: var(--dos-green);
+}
+
+.boot-overlay-lines p {
+  margin: 0;
+  line-height: 1.45;
+}
+
+.boot-overlay-prompt {
+  margin: 0.75rem 0 0;
+  font-size: 0.95rem;
+  color: var(--dos-text);
+}
+
+html.boot-active {
+  overflow: hidden;
 }
 
 .boot-lines p {
@@ -425,7 +496,7 @@ body::before {
   align-items: baseline;
   justify-content: space-between;
   gap: 1rem;
-  margin-bottom: 0.3rem;
+  margin-bottom: 0.45rem;
 }
 
 .project-title {
@@ -453,31 +524,30 @@ body::before {
 }
 
 .project-description {
-  margin: 0 0 0.65rem;
+  margin: 0 0 0.5rem;
   color: var(--dos-text);
-}
-
-.project-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.35rem;
-  margin: 0 0 0.65rem;
-  padding: 0;
-  list-style: none;
-}
-
-.project-tags li {
-  font-size: 0.75rem;
-  color: var(--dos-text);
-  padding: 0.1rem 0.4rem;
-  background: #0a0a0a;
-  border: 1px solid #505050;
 }
 
 .project-links {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
+  align-items: center;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.project-link-sep {
+  color: var(--dos-muted);
+}
+
+.project-links a {
+  color: var(--dos-link);
+  text-decoration: none;
+}
+
+.project-links a:hover {
+  color: var(--win-light);
+  background: var(--title-blue);
 }
 
 .win95-link-btn {
@@ -593,7 +663,6 @@ body::before {
 
 .site-footer {
   max-width: 42rem;
-  margin: 0 auto;
   padding: 0.5rem 1rem 2rem;
 }
 
@@ -868,6 +937,17 @@ button.win95-btn {
   border: 1px inset var(--win-dark);
 }
 
+.taskbar-clock {
+  flex-shrink: 0;
+  min-width: 4.75rem;
+  padding: 0.15rem 0.45rem;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+  background: var(--win-gray);
+  border: 2px solid;
+  border-color: var(--win-dark) var(--win-light) var(--win-light) var(--win-dark);
+}
+
 .taskbar-copy {
   padding: 0 0.35rem;
   color: var(--win-dark);
@@ -934,6 +1014,117 @@ button.win95-btn {
   font-size: 0.82rem;
   font-weight: 700;
   color: var(--title-blue);
+}
+
+.drive-explorer-window {
+  width: min(100%, 28rem);
+}
+
+.drive-menu-bar,
+.drive-toolbar {
+  margin: 0 3px;
+}
+
+.drive-address-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin: 0 3px 3px;
+  padding: 0.2rem 0.35rem;
+  font-family: var(--ui);
+  font-size: 0.72rem;
+  color: var(--win-black);
+  background: var(--win-gray);
+  border: 2px solid;
+  border-color: var(--win-dark) var(--win-light) var(--win-light) var(--win-dark);
+}
+
+.drive-address-label {
+  flex-shrink: 0;
+  font-weight: 700;
+}
+
+.drive-address-path {
+  flex: 1;
+  min-width: 0;
+  padding: 0.1rem 0.35rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  background: var(--win-light);
+  border: 1px inset var(--win-dark);
+}
+
+.drive-explorer-body {
+  min-height: 10rem;
+  background: var(--win-light);
+}
+
+.drive-folder-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem 1.35rem;
+  padding: 0.35rem 0.15rem;
+}
+
+.drive-folder-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+  width: 5.25rem;
+  padding: 0.25rem;
+  font-family: var(--ui);
+  font-size: 0.72rem;
+  line-height: 1.2;
+  color: var(--win-black);
+  text-align: center;
+  cursor: pointer;
+  background: transparent;
+  border: 1px dotted transparent;
+}
+
+.drive-folder-btn:hover,
+.drive-folder-btn:focus-visible {
+  background: rgba(0, 0, 128, 0.18);
+  border-color: rgba(0, 0, 128, 0.45);
+  outline: none;
+}
+
+.drive-folder-icon {
+  transform: scale(0.95);
+}
+
+.drive-folder-label {
+  word-break: break-word;
+}
+
+.drive-status-bar {
+  margin: 0 3px 3px;
+}
+
+.drive-image-window {
+  width: min(100%, 26rem);
+}
+
+#drive-c-image-overlay:not(.is-hidden) {
+  z-index: 10002;
+}
+
+.drive-image-body {
+  text-align: center;
+  background: var(--win-gray);
+}
+
+.drive-image {
+  display: block;
+  width: 100%;
+  max-width: 22rem;
+  height: auto;
+  margin: 0 auto;
+  border: 2px solid;
+  border-color: var(--win-dark) var(--win-light) var(--win-light) var(--win-dark);
+  background: #000;
 }
 
 .nedry-overlay {
@@ -1091,7 +1282,13 @@ button.win95-btn {
   }
 
   .desktop-icons {
-    display: none;
+    display: flex;
+    top: auto;
+    bottom: 4.75rem;
+    left: 0.5rem;
+    gap: 0.65rem;
+    transform: scale(0.88);
+    transform-origin: bottom left;
   }
 
   .toolbar {
@@ -1117,5 +1314,19 @@ button.win95-btn {
 
   .taskbar-copy {
     display: none;
+  }
+}
+
+.page,
+.site-footer {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+@media (min-width: 960px) {
+  .page,
+  .site-footer {
+    margin-left: clamp(6.5rem, 14vw, 11rem);
+    margin-right: auto;
   }
 }

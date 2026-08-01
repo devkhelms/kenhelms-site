@@ -1,22 +1,15 @@
 <article class="project-card">
   <header class="project-header">
     <h3 class="project-title">{{ .title }}<span class="file-ext">.EXE</span></h3>
-    <span class="project-year">{{ .year }}</span>
   </header>
   <p class="project-description">{{ .description }}</p>
-  {{ with .tags }}
-  <ul class="project-tags" aria-label="Technologies">
-    {{ range . }}
-    <li>{{ . }}</li>
-    {{ end }}
-  </ul>
-  {{ end }}
   {{ with .links }}
-  <div class="project-links">
-    {{ with .project_site }}<a class="win95-link-btn" href="{{ . }}" rel="noopener noreferrer">Project Site</a>{{ end }}
-    {{ with .repo }}<a class="win95-link-btn" href="{{ . }}" rel="noopener noreferrer">Source</a>{{ end }}
-    {{ with .demo }}<a class="win95-link-btn" href="{{ . }}" rel="noopener noreferrer">Demo</a>{{ end }}
-    {{ with .writeup }}<a class="win95-link-btn" href="{{ . }}" rel="noopener noreferrer">Write-up</a>{{ end }}
-  </div>
+  {{ $links := . }}
+  <nav class="project-links" aria-label="{{ $.title }} links">
+    {{ with $links.project_site }}<a href="{{ . }}" rel="noopener noreferrer">site</a>{{ end }}
+    {{ with $links.repo }}{{ if $links.project_site }}<span class="project-link-sep" aria-hidden="true"> · </span>{{ end }}<a href="{{ . }}" rel="noopener noreferrer">source</a>{{ end }}
+    {{ with $links.demo }}{{ if or $links.project_site $links.repo }}<span class="project-link-sep" aria-hidden="true"> · </span>{{ end }}<a href="{{ . }}" rel="noopener noreferrer">demo</a>{{ end }}
+    {{ with $links.writeup }}{{ if or $links.project_site $links.repo $links.demo }}<span class="project-link-sep" aria-hidden="true"> · </span>{{ end }}<a href="{{ . }}" rel="noopener noreferrer">write-up</a>{{ end }}
+  </nav>
   {{ end }}
 </article>

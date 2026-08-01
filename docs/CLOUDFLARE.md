@@ -143,7 +143,7 @@ Desktop file under **Drive C:** → password prompt → reward image with visito
 |-------|----------|
 | UI | `layouts/partials/passwords.html`, `static/js/passwords.js` |
 | API | `functions/api/passwords.js` → `POST /api/passwords` |
-| Image | `static/images/quaid.png` |
+| Image | `static/images/quaid.webp` |
 | Counter | Cloudflare **KV** binding |
 
 ### KV setup (required for visitor count)
