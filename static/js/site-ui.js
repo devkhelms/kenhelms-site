@@ -45,7 +45,8 @@
   function focusPortfolio() {
     var win = document.getElementById("portfolio-window");
     if (!win) return;
-    win.scrollIntoView({ behavior: "smooth", block: "center" });
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    win.scrollIntoView({ behavior: "smooth", block: "start" });
     win.classList.remove("is-highlight");
     void win.offsetWidth;
     win.classList.add("is-highlight");
@@ -54,6 +55,20 @@
       win.classList.remove("is-highlight");
       setStatus("Ready");
     }, 1200);
+  }
+
+  function closeStartMenu() {
+    var startMenu = document.getElementById("start-menu");
+    if (startMenu) startMenu.classList.remove("is-open");
+  }
+
+  function bindMenuAction(el, action) {
+    if (!el) return;
+    el.addEventListener("click", function (e) {
+      e.preventDefault();
+      closeStartMenu();
+      action();
+    });
   }
 
   function updateClock() {
@@ -119,17 +134,17 @@
   document.addEventListener("DOMContentLoaded", function () {
     var startBtn = document.getElementById("start-btn");
     var startMenu = document.getElementById("start-menu");
+    var startWrap = startBtn ? startBtn.closest(".start-wrap") : null;
 
     if (startBtn && startMenu) {
       startBtn.addEventListener("click", function (e) {
         e.stopPropagation();
         startMenu.classList.toggle("is-open");
       });
-      document.addEventListener("click", function () {
-        startMenu.classList.remove("is-open");
-      });
-      startMenu.addEventListener("click", function (e) {
-        e.stopPropagation();
+      document.addEventListener("click", function (e) {
+        if (!startMenu.classList.contains("is-open")) return;
+        if (startWrap && startWrap.contains(e.target)) return;
+        closeStartMenu();
       });
     }
 
@@ -156,60 +171,40 @@
     }
 
     var launchSnake = document.getElementById("launch-snake");
-    if (launchSnake) {
-      launchSnake.addEventListener("click", function () {
-        if (startMenu) startMenu.classList.remove("is-open");
-        loadSnake().then(function () {
-          window.SnakeGame.open();
-        });
+    bindMenuAction(launchSnake, function () {
+      loadSnake().then(function () {
+        window.SnakeGame.open();
       });
-    }
+    });
 
     var launchContact = document.getElementById("launch-contact");
-    if (launchContact) {
-      launchContact.addEventListener("click", function () {
-        if (startMenu) startMenu.classList.remove("is-open");
-        loadContact().then(function () {
-          window.ContactForm.open();
-        });
+    bindMenuAction(launchContact, function () {
+      loadContact().then(function () {
+        window.ContactForm.open();
       });
-    }
+    });
 
     var launchPasswords = document.getElementById("launch-passwords");
-    if (launchPasswords) {
-      launchPasswords.addEventListener("click", function () {
-        if (startMenu) startMenu.classList.remove("is-open");
-        loadPasswords().then(function () {
-          window.PasswordsEgg.open();
-        });
+    bindMenuAction(launchPasswords, function () {
+      loadPasswords().then(function () {
+        window.PasswordsEgg.open();
       });
-    }
+    });
 
     var launchPortfolio = document.getElementById("launch-portfolio");
-    if (launchPortfolio) {
-      launchPortfolio.addEventListener("click", function () {
-        if (startMenu) startMenu.classList.remove("is-open");
-        focusPortfolio();
-      });
-    }
+    bindMenuAction(launchPortfolio, focusPortfolio);
 
     var launchFiles = document.getElementById("launch-files");
-    if (launchFiles) {
-      launchFiles.addEventListener("click", function () {
-        if (startMenu) startMenu.classList.remove("is-open");
-        setStatus("C:\\");
-        openDriveCExplorer();
-      });
-    }
+    bindMenuAction(launchFiles, function () {
+      setStatus("C:\\");
+      openDriveCExplorer();
+    });
 
     var launchReboot = document.getElementById("launch-reboot");
-    if (launchReboot) {
-      launchReboot.addEventListener("click", function () {
-        if (startMenu) startMenu.classList.remove("is-open");
-        setStatus("Restarting...");
-        if (window.SiteBoot && window.SiteBoot.reboot) window.SiteBoot.reboot();
-      });
-    }
+    bindMenuAction(launchReboot, function () {
+      setStatus("Restarting...");
+      if (window.SiteBoot && window.SiteBoot.reboot) window.SiteBoot.reboot();
+    });
 
     var openContact = document.getElementById("open-contact");
     if (openContact) {

@@ -345,8 +345,12 @@ html.boot-skip .boot-lines {
   display: none;
 }
 
-html.boot-skip .boot-overlay {
-  display: none;
+html.boot-skip .boot-overlay,
+.boot-overlay.is-hidden,
+.boot-overlay[hidden] {
+  display: none !important;
+  pointer-events: none !important;
+  visibility: hidden !important;
 }
 
 .boot-overlay {
@@ -360,13 +364,10 @@ html.boot-skip .boot-overlay {
   background: #000000;
 }
 
-.boot-overlay.is-hidden {
-  display: none;
-}
-
 .boot-overlay.is-fading {
   opacity: 0;
   transition: opacity 0.3s ease;
+  pointer-events: none !important;
 }
 
 .boot-overlay.is-reboot-fade {
@@ -685,7 +686,8 @@ html.boot-active {
   background: var(--win-gray);
   border: 2px solid;
   border-color: var(--win-light) var(--win-black) var(--win-black) var(--win-light);
-  z-index: 10002;
+  z-index: 10004;
+  touch-action: manipulation;
 }
 
 .start-menu.is-open {
@@ -703,6 +705,7 @@ html.boot-active {
   cursor: pointer;
   background: transparent;
   border: none;
+  touch-action: manipulation;
 }
 
 .start-menu-item:hover {
@@ -1305,7 +1308,8 @@ button.win95-btn {
     padding: 0.75rem 0.75rem 0.65rem;
   }
 
-  .boot-lines {
+  .boot-lines,
+  .prompt-line {
     display: none;
   }
 

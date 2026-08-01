@@ -102,6 +102,7 @@
     }
 
     setTimeout(function () {
+      if (overlay) overlay.style.pointerEvents = "none";
       overlay.classList.add("is-fading");
       setTimeout(markSeen, prefersReducedMotion() ? 80 : 320);
     }, prefersReducedMotion() ? 80 : 450);

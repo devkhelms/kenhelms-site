@@ -1,6 +1,22 @@
-<div class="boot-overlay" id="boot-overlay" aria-hidden="false">
+<div class="boot-overlay is-hidden" id="boot-overlay" hidden aria-hidden="true">
   <div class="boot-overlay-inner">
     <div class="boot-overlay-lines" id="boot-overlay-lines" aria-live="polite"></div>
     <p class="boot-overlay-prompt"><span class="prompt-path">C:\SITE&gt;</span><span class="cursor">_</span></p>
   </div>
 </div>
+<script>
+(function () {
+  try {
+    if (sessionStorage.getItem("kenhelms-boot-seen")) {
+      document.documentElement.classList.add("boot-skip");
+      return;
+    }
+    var boot = document.getElementById("boot-overlay");
+    if (!boot) return;
+    boot.hidden = false;
+    boot.classList.remove("is-hidden");
+    boot.setAttribute("aria-hidden", "false");
+    document.documentElement.classList.add("boot-active");
+  } catch (e) {}
+})();
+</script>
