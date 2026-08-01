@@ -1,8 +1,8 @@
 # kenhelms.dev
 
-Personal portfolio site — Win95 shell, DOS terminal interior. Built with [Hugo](https://gohugo.io/) and deployed on Cloudflare Pages.
+Personal portfolio — Win95 shell, DOS terminal interior. Built with [Hugo](https://gohugo.io/) and deployed on [Cloudflare Pages](https://pages.cloudflare.com/).
 
-Live: [https://kenhelms.dev](https://kenhelms.dev)
+**Live:** [https://kenhelms.dev](https://kenhelms.dev)
 
 ## Stack
 
@@ -11,12 +11,13 @@ Live: [https://kenhelms.dev](https://kenhelms.dev)
 | Site generator | Hugo |
 | Hosting | Cloudflare Pages |
 | Contact API | Pages Function (`functions/api/contact.js`) |
+| Visitor counter | Pages Function + KV (`functions/api/passwords.js`) |
 | Email delivery | [Resend](https://resend.com) |
 | Bot protection | Cloudflare Turnstile |
 
 ## Local development
 
-Requirements: Hugo (0.164+ recommended; Pages uses `HUGO_VERSION` env var).
+Requires Hugo (0.164+; Pages uses the `HUGO_VERSION` env var).
 
 ```bash
 hugo server
@@ -24,43 +25,46 @@ hugo server
 
 Open [http://localhost:1313](http://localhost:1313).
 
-The contact form UI loads locally, but `/api/contact` only runs on Cloudflare Pages — submissions fail outside production.
+The contact form UI loads locally, but `/api/*` Functions only run on Cloudflare Pages.
 
 ## Project layout
 
 ```
-content/           Page content (minimal; layout-driven home page)
-data/projects.yaml Featured projects
-functions/api/     Contact form Pages Function
-layouts/           Hugo templates
-static/css/        Styles
-static/js/         UI, snake easter egg, contact form client
-hugo.toml          Site config (public Turnstile site key)
+content/              Minimal page content (layout-driven home page)
+data/projects.yaml    Featured projects
+docs/CLOUDFLARE.md   DNS, env vars, KV, email setup
+functions/api/        Pages Functions (contact, passwords counter)
+layouts/              Hugo templates
+static/css/           Styles
+static/images/        Site images (WebP)
+static/js/            Boot, UI, easter eggs, contact client
+hugo.toml             Site config
 ```
 
 ## Content
 
-- **Projects** — edit `data/projects.yaml`. Link keys: `project_site`, `repo`, `demo`, `writeup` (not `site`; that conflicts with Hugo's global `site` object).
+- **Projects** — edit `data/projects.yaml`. Link keys: `project_site`, `repo`, `demo`, `writeup`.
 - **Tagline** — `hugo.toml` → `[params].tagline`
 
 ## Features
 
 - Single-page portfolio in a faux MS-DOS window
-- Desktop icon: **Portfolio**
-- **Start** menu: Snake, Contact
-- **Elsewhere**: Contact only
+- First-visit boot sequence (skipped on return via `sessionStorage`)
+- Desktop: **Portfolio**, **Drive C:**, **PASSWORDS.CSV**
+- **Start** menu: Portfolio, Snake, Contact, PASSWORDS.CSV
+- **Drive C:** file explorer — photo folders (`static/js/drive-c.js`)
 - Snake easter egg (`static/js/snake.js`)
 - Contact form with Turnstile → Resend
-- `PASSWORDS.CSV` easter egg (password: `password`) — see [docs/CLOUDFLARE.md](docs/CLOUDFLARE.md#passwords-csv-easter-egg)
+- `PASSWORDS.CSV` easter egg — see [docs/CLOUDFLARE.md](docs/CLOUDFLARE.md#passwords-csv-easter-egg)
 
 ## Deployment
 
-Push to `main` on GitHub. Cloudflare Pages builds with:
+Push to `main`. Cloudflare Pages builds with:
 
 - **Build command:** `hugo --minify`
 - **Output directory:** `public`
 
-See [docs/CLOUDFLARE.md](docs/CLOUDFLARE.md) for DNS, env vars, email, and `www` redirect setup.
+See [docs/CLOUDFLARE.md](docs/CLOUDFLARE.md) for production setup.
 
 ## Secrets
 

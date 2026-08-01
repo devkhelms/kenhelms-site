@@ -1,3 +1,16 @@
 /public/
 /resources/
 .hugo_build.lock
+
+# OS
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Env / secrets
+.env
+.env.*
+
+# Editor
+*.swp
+*~

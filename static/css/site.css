@@ -492,10 +492,6 @@ html.boot-active {
 }
 
 .project-header {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 1rem;
   margin-bottom: 0.45rem;
 }
 
@@ -514,13 +510,6 @@ html.boot-active {
 .file-ext {
   color: var(--dos-muted);
   font-weight: 400;
-}
-
-.project-year {
-  flex-shrink: 0;
-  font-size: 0.85rem;
-  color: var(--dos-muted);
-  font-variant-numeric: tabular-nums;
 }
 
 .project-description {
@@ -1301,11 +1290,6 @@ button.win95-btn {
 
   .boot-lines {
     font-size: 0.78rem;
-  }
-
-  .project-header {
-    flex-direction: column;
-    gap: 0.1rem;
   }
 
   .title-bar-text {

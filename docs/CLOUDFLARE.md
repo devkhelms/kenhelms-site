@@ -154,5 +154,5 @@ Desktop file under **Drive C:** → password prompt → reward image with visito
    - KV namespace: the one you created
 3. **Redeploy**
 
-Password check is server-side (case-insensitive: `password`). Wrong attempts show a Jurassic Park–style denial dialog. Without KV, the image still unlocks but the counter shows **—**.
+Password check runs in the browser (case-insensitive: `password`). Wrong attempts show a Jurassic Park–style denial dialog. The API increments the visitor counter only after a correct password. Without KV, the image still unlocks but the counter shows **—**.
 
