@@ -80,11 +80,12 @@ export async function onRequestPost({ request, env }) {
     return jsonResponse({ error: "Invalid email" }, 400);
   }
 
-  if (!env.TURNSTILE_SECRET_KEY || !env.RESEND_API_KEY) {
+  if (!env.TURNSTILE_SECRET_KEY || !env.RESEND_API_KEY || !env.CONTACT_TO) {
     console.error(
       "Missing env:",
       !env.TURNSTILE_SECRET_KEY ? "TURNSTILE_SECRET_KEY" : "",
-      !env.RESEND_API_KEY ? "RESEND_API_KEY" : ""
+      !env.RESEND_API_KEY ? "RESEND_API_KEY" : "",
+      !env.CONTACT_TO ? "CONTACT_TO" : ""
     );
     return jsonResponse({ error: "Server not configured" }, 503);
   }
@@ -106,7 +107,7 @@ export async function onRequestPost({ request, env }) {
   }
 
   const apiKey = env.RESEND_API_KEY;
-  const to = env.CONTACT_TO || "ping@kenhelms.dev";
+  const to = env.CONTACT_TO;
   const from = env.CONTACT_FROM || "forms@kenhelms.dev";
   const text = ["Name: " + name, "Email: " + email, "", message].join("\n");
   const html = [
