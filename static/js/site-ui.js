@@ -73,6 +73,7 @@
       "launch-contact": "Contact",
       "launch-passwords": "PASSWORDS.CSV",
       "launch-portfolio": "Portfolio",
+      "launch-reboot": "Restart system",
       "start-btn": "Start menu",
     };
 
@@ -182,6 +183,15 @@
       launchPortfolio.addEventListener("click", function () {
         if (startMenu) startMenu.classList.remove("is-open");
         focusPortfolio();
+      });
+    }
+
+    var launchReboot = document.getElementById("launch-reboot");
+    if (launchReboot) {
+      launchReboot.addEventListener("click", function () {
+        if (startMenu) startMenu.classList.remove("is-open");
+        setStatus("Restarting...");
+        if (window.SiteBoot && window.SiteBoot.reboot) window.SiteBoot.reboot();
       });
     }
 

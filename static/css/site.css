@@ -365,6 +365,16 @@ html.boot-skip .boot-overlay {
   transition: opacity 0.3s ease;
 }
 
+.boot-overlay.is-reboot-fade {
+  transition: opacity 1.2s ease;
+}
+
+html.boot-rebooting .page,
+html.boot-rebooting .site-footer,
+html.boot-rebooting .desktop-icons {
+  visibility: hidden;
+}
+
 .boot-overlay-inner {
   width: min(100%, 36rem);
 }
@@ -558,25 +568,15 @@ html.boot-active {
   background: var(--title-blue);
 }
 
-.link-button {
-  padding: 0;
-  font: inherit;
-  color: var(--dos-link);
-  text-decoration: underline;
-  cursor: pointer;
-  background: none;
-  border: none;
-}
-
-.link-button:hover {
-  color: var(--win-light);
-  background: var(--title-blue);
-}
-
 .link-list {
   margin: 0;
   padding: 0;
   list-style: none;
+}
+
+.link-list .win95-link-btn {
+  min-width: 4.75rem;
+  text-align: center;
 }
 
 .prompt-line {
@@ -704,6 +704,13 @@ html.boot-active {
 .start-menu-item:hover {
   background: var(--title-blue);
   color: var(--win-light);
+}
+
+.start-menu-divider {
+  margin: 0.2rem 0.15rem;
+  border: 0;
+  border-top: 1px solid var(--win-dark);
+  box-shadow: 0 1px 0 var(--win-light);
 }
 
 button.win95-btn {
